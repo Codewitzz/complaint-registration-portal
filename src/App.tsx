@@ -53,11 +53,20 @@ export default function App() {
         }
       );
       const data = await response.json();
-      if (data.user) {
+      if (data.user && data.user.role) {
         setUserRole(data.user.role);
+      } else {
+        console.error('User role not found in response:', data);
+        // If role is not found, try to get it from session
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          // Try to fetch role again or set a default
+          console.error('Failed to get user role, please try logging in again');
+        }
       }
     } catch (error) {
       console.error('Failed to fetch user role:', error);
+      // Don't leave user in blank state - show error message
     }
   };
 
@@ -78,8 +87,21 @@ export default function App() {
     );
   }
 
-  if (!accessToken || !userRole) {
+  if (!accessToken) {
     return <AuthForm onAuthSuccess={handleAuthSuccess} />;
+  }
+
+  // If we have accessToken but no userRole yet, show loading
+  if (!userRole) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading your dashboard...</p>
+          <p className="text-sm text-gray-500 mt-2">If this takes too long, please refresh the page</p>
+        </div>
+      </div>
+    );
   }
 
   // Render appropriate dashboard based on user role
@@ -97,6 +119,7 @@ export default function App() {
         <div className="min-h-screen flex items-center justify-center bg-gray-50">
           <div className="text-center">
             <p className="text-red-600 mb-4">Unknown user role: {userRole}</p>
+            <p className="text-sm text-gray-600 mb-4">Access Token: {accessToken ? 'Present' : 'Missing'}</p>
             <button
               onClick={handleLogout}
               className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"

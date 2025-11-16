@@ -19,6 +19,8 @@ import {
 import { ComplaintCard } from './ComplaintCard';
 import { TrackingTimeline } from './TrackingTimeline';
 import { LocationMap } from './LocationMap';
+import { ImageUpload } from './ImageUpload';
+import { PhotoLightbox } from './PhotoLightbox';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
 
 interface ContractorDashboardProps {
@@ -33,6 +35,10 @@ export function ContractorDashboard({ accessToken, onLogout }: ContractorDashboa
   const [assignment, setAssignment] = useState<any>(null);
   const [showComplete, setShowComplete] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [completionPhotos, setCompletionPhotos] = useState<string[]>([]);
+  const [lightboxImages, setLightboxImages] = useState<string[]>([]);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [showLightbox, setShowLightbox] = useState(false);
 
   useEffect(() => {
     loadUserProfile();
@@ -158,7 +164,7 @@ export function ContractorDashboard({ accessToken, onLogout }: ContractorDashboa
     const formData = new FormData(e.currentTarget);
     const completionData = {
       completionNotes: formData.get('completionNotes'),
-      completionPhotos: [] // In production, handle photo uploads
+      completionPhotos: completionPhotos
     };
 
     try {
@@ -180,6 +186,7 @@ export function ContractorDashboard({ accessToken, onLogout }: ContractorDashboa
         alert('Work completed successfully!');
         setShowComplete(false);
         setSelectedComplaint(null);
+        setCompletionPhotos([]);
         loadComplaints();
       } else {
         alert(data.error || 'Failed to mark as complete');
@@ -450,7 +457,11 @@ export function ContractorDashboard({ accessToken, onLogout }: ContractorDashboa
                               src={photo}
                               alt={`Complaint photo ${index + 1}`}
                               className="w-full h-full object-cover cursor-pointer hover:opacity-90"
-                              onClick={() => window.open(photo, '_blank')}
+                              onClick={() => {
+                                setLightboxImages(selectedComplaint.photos);
+                                setLightboxIndex(index);
+                                setShowLightbox(true);
+                              }}
                             />
                           </div>
                         ))}
@@ -483,7 +494,7 @@ export function ContractorDashboard({ accessToken, onLogout }: ContractorDashboa
 
       {/* Complete Work Dialog */}
       <Dialog open={showComplete} onOpenChange={setShowComplete}>
-        <DialogContent>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Mark Work as Complete</DialogTitle>
             <DialogDescription>
@@ -503,23 +514,34 @@ export function ContractorDashboard({ accessToken, onLogout }: ContractorDashboa
             </div>
 
             <div className="space-y-2">
-              <Label>Completion Photos</Label>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                <Upload className="size-8 text-gray-400 mx-auto mb-2" />
-                <p className="text-sm text-muted-foreground">
-                  Photo upload will be available in production
+              <Label>Completion Photos (Required)</Label>
+              <ImageUpload
+                onImagesChange={(images) => setCompletionPhotos(images)}
+                maxImages={10}
+                maxSizeMB={5}
+              />
+              {completionPhotos.length === 0 && (
+                <p className="text-xs text-red-600 mt-1">
+                  Please upload at least one completion photo
                 </p>
-              </div>
+              )}
             </div>
 
             <div className="flex gap-3">
-              <Button type="submit" className="flex-1" disabled={loading}>
+              <Button 
+                type="submit" 
+                className="flex-1" 
+                disabled={loading || completionPhotos.length === 0}
+              >
                 {loading ? 'Submitting...' : 'Submit & Complete'}
               </Button>
               <Button 
                 type="button" 
                 variant="outline" 
-                onClick={() => setShowComplete(false)}
+                onClick={() => {
+                  setShowComplete(false);
+                  setCompletionPhotos([]);
+                }}
               >
                 Cancel
               </Button>
@@ -527,6 +549,14 @@ export function ContractorDashboard({ accessToken, onLogout }: ContractorDashboa
           </form>
         </DialogContent>
       </Dialog>
+
+      {/* Photo Lightbox */}
+      <PhotoLightbox
+        images={lightboxImages}
+        initialIndex={lightboxIndex}
+        isOpen={showLightbox}
+        onClose={() => setShowLightbox(false)}
+      />
     </div>
   );
 }

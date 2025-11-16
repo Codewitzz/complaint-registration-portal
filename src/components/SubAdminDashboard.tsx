@@ -14,11 +14,17 @@ import {
   Clock, 
   CheckCircle,
   UserPlus,
-  Phone
+  Phone,
+  Star,
+  Megaphone,
+  Edit,
+  Trash2,
+  Plus
 } from 'lucide-react';
 import { ComplaintCard } from './ComplaintCard';
 import { TrackingTimeline } from './TrackingTimeline';
 import { LocationMap } from './LocationMap';
+import { PhotoLightbox } from './PhotoLightbox';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
 
 interface SubAdminDashboardProps {
@@ -32,13 +38,22 @@ export function SubAdminDashboard({ accessToken, onLogout }: SubAdminDashboardPr
   const [contractors, setContractors] = useState<any[]>([]);
   const [selectedComplaint, setSelectedComplaint] = useState<any>(null);
   const [assignment, setAssignment] = useState<any>(null);
+  const [feedback, setFeedback] = useState<any>(null);
   const [showAssign, setShowAssign] = useState(false);
+  const [showAnnouncements, setShowAnnouncements] = useState(false);
+  const [showAnnouncementForm, setShowAnnouncementForm] = useState(false);
+  const [announcements, setAnnouncements] = useState<any[]>([]);
+  const [editingAnnouncement, setEditingAnnouncement] = useState<any>(null);
   const [loading, setLoading] = useState(false);
+  const [lightboxImages, setLightboxImages] = useState<string[]>([]);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [showLightbox, setShowLightbox] = useState(false);
 
   useEffect(() => {
     loadUserProfile();
     loadComplaints();
     loadContractors();
+    loadAnnouncements();
   }, []);
 
   const loadUserProfile = async () => {
@@ -86,6 +101,21 @@ export function SubAdminDashboard({ accessToken, onLogout }: SubAdminDashboardPr
     }
   };
 
+  const loadAnnouncements = async () => {
+    try {
+      const response = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-81e5b189/announcements/all`,
+        {
+          headers: { 'Authorization': `Bearer ${accessToken}` }
+        }
+      );
+      const data = await response.json();
+      setAnnouncements(data.announcements || []);
+    } catch (error) {
+      console.error('Failed to load announcements:', error);
+    }
+  };
+
   const loadComplaintDetails = async (complaintId: string) => {
     try {
       const response = await fetch(
@@ -97,6 +127,7 @@ export function SubAdminDashboard({ accessToken, onLogout }: SubAdminDashboardPr
       const data = await response.json();
       setSelectedComplaint(data.complaint);
       setAssignment(data.assignment);
+      setFeedback(data.feedback);
     } catch (error) {
       console.error('Failed to load complaint details:', error);
     }
@@ -145,6 +176,81 @@ export function SubAdminDashboard({ accessToken, onLogout }: SubAdminDashboardPr
     }
   };
 
+  const handleSaveAnnouncement = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const formData = new FormData(e.currentTarget);
+    const announcementData = {
+      id: editingAnnouncement?.id,
+      title: formData.get('title'),
+      message: formData.get('message'),
+      priority: formData.get('priority'),
+      isActive: formData.get('isActive') === 'true'
+    };
+
+    try {
+      const response = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-81e5b189/announcements`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`
+          },
+          body: JSON.stringify(announcementData)
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert(editingAnnouncement ? 'Announcement updated successfully!' : 'Announcement created successfully!');
+        setShowAnnouncementForm(false);
+        setEditingAnnouncement(null);
+        loadAnnouncements();
+        (e.target as HTMLFormElement).reset();
+      } else {
+        alert(data.error || 'Failed to save announcement');
+      }
+    } catch (error) {
+      console.error('Failed to save announcement:', error);
+      alert('Failed to save announcement');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteAnnouncement = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this announcement?')) return;
+
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-81e5b189/announcements/${id}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${accessToken}`
+          }
+        }
+      );
+
+      if (response.ok) {
+        alert('Announcement deleted successfully!');
+        loadAnnouncements();
+      } else {
+        const data = await response.json();
+        alert(data.error || 'Failed to delete announcement');
+      }
+    } catch (error) {
+      console.error('Failed to delete announcement:', error);
+      alert('Failed to delete announcement');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const newComplaints = complaints.filter(c => c.status === 'assigned_to_subadmin');
   const assignedComplaints = complaints.filter(c => 
     ['assigned_to_contractor', 'in_progress'].includes(c.status)
@@ -173,6 +279,17 @@ export function SubAdminDashboard({ accessToken, onLogout }: SubAdminDashboardPr
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 py-6">
+        {/* Action Buttons */}
+        <div className="flex gap-3 mb-6">
+          <Button onClick={() => {
+            setShowAnnouncements(true);
+            loadAnnouncements();
+          }} variant="outline">
+            <Megaphone className="size-4 mr-2" />
+            Manage Announcements
+          </Button>
+        </div>
+
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           <Card>
@@ -362,7 +479,11 @@ export function SubAdminDashboard({ accessToken, onLogout }: SubAdminDashboardPr
                               src={photo}
                               alt={`Complaint photo ${index + 1}`}
                               className="w-full h-full object-cover cursor-pointer hover:opacity-90"
-                              onClick={() => window.open(photo, '_blank')}
+                              onClick={() => {
+                                setLightboxImages(selectedComplaint.photos);
+                                setLightboxIndex(index);
+                                setShowLightbox(true);
+                              }}
                             />
                           </div>
                         ))}
@@ -392,6 +513,110 @@ export function SubAdminDashboard({ accessToken, onLogout }: SubAdminDashboardPr
                           Call: {assignment.contractorPhone}
                         </Button>
                       )}
+                    </CardContent>
+                  </Card>
+                )}
+
+                {/* Completion Details */}
+                {assignment && assignment.completionNotes && (
+                  <Card className="bg-green-50 border-green-200">
+                    <CardContent className="p-4">
+                      <h4 className="font-medium mb-3 flex items-center gap-2">
+                        <CheckCircle className="size-4" />
+                        Work Completion Details
+                      </h4>
+                      {assignment.completedAt && (
+                        <div className="mb-3 text-sm">
+                          <span className="text-muted-foreground">Completed On:</span>
+                          <p className="font-medium">
+                            {new Date(assignment.completedAt).toLocaleString()}
+                          </p>
+                        </div>
+                      )}
+                      <div className="mb-3">
+                        <span className="text-sm text-muted-foreground">Completion Notes:</span>
+                        <p className="text-sm mt-1">{assignment.completionNotes}</p>
+                      </div>
+                      {assignment.completionPhotos && assignment.completionPhotos.length > 0 && (
+                        <div>
+                          <h5 className="font-medium mb-2 text-sm">
+                            Completion Photos ({assignment.completionPhotos.length})
+                          </h5>
+                          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                            {assignment.completionPhotos.map((photo: string, index: number) => (
+                              <div key={index} className="aspect-square rounded-lg overflow-hidden border border-gray-200">
+                                <img
+                                  src={photo}
+                                  alt={`Completion photo ${index + 1}`}
+                                  className="w-full h-full object-cover cursor-pointer hover:opacity-90"
+                                  onClick={() => {
+                                    setLightboxImages(assignment.completionPhotos);
+                                    setLightboxIndex(index);
+                                    setShowLightbox(true);
+                                  }}
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                )}
+
+                {/* Feedback Section */}
+                {feedback && (
+                  <Card className="bg-purple-50 border-purple-200">
+                    <CardContent className="p-4">
+                      <h4 className="font-medium mb-3 flex items-center gap-2">
+                        <Star className="size-4 fill-yellow-400 text-yellow-400" />
+                        Citizen Feedback
+                      </h4>
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm text-muted-foreground">Rating:</span>
+                          <div className="flex items-center gap-1">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                              <Star
+                                key={star}
+                                className={`size-4 ${
+                                  star <= feedback.rating
+                                    ? 'fill-yellow-400 text-yellow-400'
+                                    : 'text-gray-300'
+                                }`}
+                              />
+                            ))}
+                            <span className="ml-2 text-sm font-medium">
+                              {feedback.rating} / 5
+                            </span>
+                          </div>
+                        </div>
+                        <div>
+                          <span className="text-sm text-muted-foreground">Satisfaction:</span>
+                          <Badge
+                            className={`ml-2 ${
+                              feedback.satisfied
+                                ? 'bg-green-100 text-green-800 border-green-300'
+                                : 'bg-red-100 text-red-800 border-red-300'
+                            }`}
+                          >
+                            {feedback.satisfied ? 'Satisfied' : 'Not Satisfied'}
+                          </Badge>
+                        </div>
+                        {feedback.comment && (
+                          <div>
+                            <span className="text-sm text-muted-foreground">Comment:</span>
+                            <p className="text-sm mt-1 bg-white p-2 rounded border">
+                              {feedback.comment}
+                            </p>
+                          </div>
+                        )}
+                        {feedback.submittedAt && (
+                          <div className="text-xs text-muted-foreground">
+                            Submitted on: {new Date(feedback.submittedAt).toLocaleString()}
+                          </div>
+                        )}
+                      </div>
                     </CardContent>
                   </Card>
                 )}
@@ -498,6 +723,184 @@ export function SubAdminDashboard({ accessToken, onLogout }: SubAdminDashboardPr
           </form>
         </DialogContent>
       </Dialog>
+
+      {/* Announcements Management Dialog */}
+      <Dialog open={showAnnouncements} onOpenChange={setShowAnnouncements}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Manage Announcements</DialogTitle>
+            <DialogDescription>
+              Create and manage announcements that appear on the login/signup page
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <Button
+              onClick={() => {
+                setEditingAnnouncement(null);
+                setShowAnnouncementForm(true);
+              }}
+              className="w-full"
+            >
+              <Plus className="size-4 mr-2" />
+              Create New Announcement
+            </Button>
+
+            <div className="space-y-3">
+              {announcements.length === 0 ? (
+                <Card>
+                  <CardContent className="p-8 text-center">
+                    <Megaphone className="size-12 text-gray-400 mx-auto mb-4" />
+                    <p className="text-muted-foreground">No announcements yet</p>
+                  </CardContent>
+                </Card>
+              ) : (
+                announcements.map((announcement) => (
+                  <Card key={announcement.id} className={announcement.isActive ? 'border-2 border-blue-300' : 'opacity-60'}>
+                    <CardContent className="p-4">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <h4 className="font-semibold">{announcement.title}</h4>
+                            {announcement.priority === 'high' && (
+                              <Badge variant="destructive">High Priority</Badge>
+                            )}
+                            {!announcement.isActive && (
+                              <Badge variant="outline">Inactive</Badge>
+                            )}
+                          </div>
+                          <p className="text-sm text-muted-foreground whitespace-pre-line mb-2">
+                            {announcement.message}
+                          </p>
+                          <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                            <span>By: {announcement.createdByName}</span>
+                            <span>Created: {new Date(announcement.createdAt).toLocaleString()}</span>
+                            {announcement.updatedAt !== announcement.createdAt && (
+                              <span>Updated: {new Date(announcement.updatedAt).toLocaleString()}</span>
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => {
+                              setEditingAnnouncement(announcement);
+                              setShowAnnouncementForm(true);
+                            }}
+                          >
+                            <Edit className="size-4" />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleDeleteAnnouncement(announcement.id)}
+                            disabled={loading}
+                          >
+                            <Trash2 className="size-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))
+              )}
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Announcement Form Dialog */}
+      <Dialog open={showAnnouncementForm} onOpenChange={(open) => {
+        setShowAnnouncementForm(open);
+        if (!open) {
+          setEditingAnnouncement(null);
+        }
+      }}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {editingAnnouncement ? 'Edit Announcement' : 'Create New Announcement'}
+            </DialogTitle>
+            <DialogDescription>
+              This announcement will be displayed on the login/signup page
+            </DialogDescription>
+          </DialogHeader>
+          <form onSubmit={handleSaveAnnouncement} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="announcement-title">Title</Label>
+              <Input
+                id="announcement-title"
+                name="title"
+                placeholder="e.g., Important Notice"
+                defaultValue={editingAnnouncement?.title}
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="announcement-message">Message</Label>
+              <Textarea
+                id="announcement-message"
+                name="message"
+                placeholder="Enter the announcement message..."
+                rows={5}
+                defaultValue={editingAnnouncement?.message}
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="announcement-priority">Priority</Label>
+              <Select name="priority" defaultValue={editingAnnouncement?.priority || 'normal'}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select priority" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="normal">Normal</SelectItem>
+                  <SelectItem value="high">High Priority</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="announcement-active">Status</Label>
+              <Select name="isActive" defaultValue={editingAnnouncement?.isActive !== false ? 'true' : 'false'}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="true">Active (Visible on login page)</SelectItem>
+                  <SelectItem value="false">Inactive (Hidden)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="flex gap-3">
+              <Button type="submit" className="flex-1" disabled={loading}>
+                {loading ? 'Saving...' : editingAnnouncement ? 'Update' : 'Create'}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => {
+                  setShowAnnouncementForm(false);
+                  setEditingAnnouncement(null);
+                }}
+              >
+                Cancel
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Photo Lightbox */}
+      <PhotoLightbox
+        images={lightboxImages}
+        initialIndex={lightboxIndex}
+        isOpen={showLightbox}
+        onClose={() => setShowLightbox(false)}
+      />
     </div>
   );
 }

@@ -24,6 +24,7 @@ import { TrackingTimeline } from './TrackingTimeline';
 import { LocationPicker } from './LocationPicker';
 import { ImageUpload } from './ImageUpload';
 import { LocationMap } from './LocationMap';
+import { PhotoLightbox } from './PhotoLightbox';
 import { projectId, publicAnonKey } from '../utils/supabase/info';
 
 interface CitizenDashboardProps {
@@ -37,8 +38,12 @@ export function CitizenDashboard({ accessToken, onLogout }: CitizenDashboardProp
   const [departments, setDepartments] = useState<any[]>([]);
   const [showNewComplaint, setShowNewComplaint] = useState(false);
   const [selectedComplaint, setSelectedComplaint] = useState<any>(null);
+  const [assignment, setAssignment] = useState<any>(null);
   const [showFeedback, setShowFeedback] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [lightboxImages, setLightboxImages] = useState<string[]>([]);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [showLightbox, setShowLightbox] = useState(false);
   const [locationData, setLocationData] = useState<{ lat: number; lng: number; address: string } | null>(null);
   const [photos, setPhotos] = useState<string[]>([]);
   const [uploadKey, setUploadKey] = useState(0);
@@ -91,6 +96,22 @@ export function CitizenDashboard({ accessToken, onLogout }: CitizenDashboardProp
       setComplaints(data.complaints || []);
     } catch (error) {
       console.error('Failed to load complaints:', error);
+    }
+  };
+
+  const loadComplaintDetails = async (complaintId: string) => {
+    try {
+      const response = await fetch(
+        `https://${projectId}.supabase.co/functions/v1/make-server-81e5b189/complaints/${complaintId}`,
+        {
+          headers: { 'Authorization': `Bearer ${accessToken}` }
+        }
+      );
+      const data = await response.json();
+      setSelectedComplaint(data.complaint);
+      setAssignment(data.assignment);
+    } catch (error) {
+      console.error('Failed to load complaint details:', error);
     }
   };
 
@@ -294,7 +315,7 @@ export function CitizenDashboard({ accessToken, onLogout }: CitizenDashboardProp
                   <ComplaintCard
                     key={complaint.id}
                     complaint={complaint}
-                    onViewDetails={() => setSelectedComplaint(complaint)}
+                    onViewDetails={() => loadComplaintDetails(complaint.id)}
                   />
                 ))}
               </div>
@@ -315,7 +336,7 @@ export function CitizenDashboard({ accessToken, onLogout }: CitizenDashboardProp
                   <ComplaintCard
                     key={complaint.id}
                     complaint={complaint}
-                    onViewDetails={() => setSelectedComplaint(complaint)}
+                    onViewDetails={() => loadComplaintDetails(complaint.id)}
                   />
                 ))}
               </div>
@@ -328,7 +349,7 @@ export function CitizenDashboard({ accessToken, onLogout }: CitizenDashboardProp
                 <ComplaintCard
                   key={complaint.id}
                   complaint={complaint}
-                  onViewDetails={() => setSelectedComplaint(complaint)}
+                  onViewDetails={() => loadComplaintDetails(complaint.id)}
                 />
               ))}
             </div>
@@ -417,7 +438,10 @@ export function CitizenDashboard({ accessToken, onLogout }: CitizenDashboardProp
       </Dialog>
 
       {/* Complaint Details Dialog */}
-      <Dialog open={!!selectedComplaint} onOpenChange={() => setSelectedComplaint(null)}>
+      <Dialog open={!!selectedComplaint} onOpenChange={() => {
+        setSelectedComplaint(null);
+        setAssignment(null);
+      }}>
         <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           {selectedComplaint && (
             <>
@@ -473,12 +497,63 @@ export function CitizenDashboard({ accessToken, onLogout }: CitizenDashboardProp
                             src={photo}
                             alt={`Complaint photo ${index + 1}`}
                             className="w-full h-full object-cover cursor-pointer hover:opacity-90"
-                            onClick={() => window.open(photo, '_blank')}
+                            onClick={() => {
+                              setLightboxImages(selectedComplaint.photos);
+                              setLightboxIndex(index);
+                              setShowLightbox(true);
+                            }}
                           />
                         </div>
                       ))}
                     </div>
                   </div>
+                )}
+
+                {/* Completion Details */}
+                {assignment && assignment.completionNotes && (
+                  <Card className="bg-green-50 border-green-200">
+                    <CardContent className="p-4">
+                      <h4 className="font-medium mb-3 flex items-center gap-2">
+                        <CheckCircle className="size-4" />
+                        Work Completion Details
+                      </h4>
+                      {assignment.completedAt && (
+                        <div className="mb-3 text-sm">
+                          <span className="text-muted-foreground">Completed On:</span>
+                          <p className="font-medium">
+                            {new Date(assignment.completedAt).toLocaleString()}
+                          </p>
+                        </div>
+                      )}
+                      <div className="mb-3">
+                        <span className="text-sm text-muted-foreground">Completion Notes:</span>
+                        <p className="text-sm mt-1">{assignment.completionNotes}</p>
+                      </div>
+                      {assignment.completionPhotos && assignment.completionPhotos.length > 0 && (
+                        <div>
+                          <h5 className="font-medium mb-2 text-sm">
+                            Completion Photos ({assignment.completionPhotos.length})
+                          </h5>
+                          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                            {assignment.completionPhotos.map((photo: string, index: number) => (
+                              <div key={index} className="aspect-square rounded-lg overflow-hidden border border-gray-200">
+                                <img
+                                  src={photo}
+                                  alt={`Completion photo ${index + 1}`}
+                                  className="w-full h-full object-cover cursor-pointer hover:opacity-90"
+                                  onClick={() => {
+                                    setLightboxImages(assignment.completionPhotos);
+                                    setLightboxIndex(index);
+                                    setShowLightbox(true);
+                                  }}
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
                 )}
 
                 <TrackingTimeline 
@@ -570,6 +645,14 @@ export function CitizenDashboard({ accessToken, onLogout }: CitizenDashboardProp
           </form>
         </DialogContent>
       </Dialog>
+
+      {/* Photo Lightbox */}
+      <PhotoLightbox
+        images={lightboxImages}
+        initialIndex={lightboxIndex}
+        isOpen={showLightbox}
+        onClose={() => setShowLightbox(false)}
+      />
     </div>
   );
 }

@@ -562,7 +562,10 @@ app.get('/make-server-81e5b189/complaints/:id', async (c) => {
     // Get assignment details if exists
     const assignment = await kv.get(`assignment:${complaintId}`);
 
-    return c.json({ complaint, assignment });
+    // Get feedback if exists
+    const feedback = await kv.get(`feedback:${complaintId}`);
+
+    return c.json({ complaint, assignment, feedback });
   } catch (error) {
     console.log('Get complaint details error:', error);
     return c.json({ error: 'Failed to get complaint: ' + error.message }, 500);
@@ -1018,6 +1021,163 @@ app.get('/make-server-81e5b189/subadmins', async (c) => {
   } catch (error) {
     console.log('Get sub-admins error:', error);
     return c.json({ error: 'Failed to get sub-admins: ' + error.message }, 500);
+  }
+});
+
+// ============= ANNOUNCEMENT ROUTES =============
+
+// Get announcements (Public - no auth required)
+app.get('/make-server-81e5b189/announcements', async (c) => {
+  try {
+    const announcementsList = await kv.get('announcements:list') || [];
+    const activeAnnouncements = [];
+    
+    for (const id of announcementsList) {
+      try {
+        const announcement = await kv.get(`announcement:${id}`);
+        if (announcement && announcement.isActive) {
+          activeAnnouncements.push(announcement);
+        }
+      } catch (err) {
+        console.log(`Error loading announcement ${id}:`, err);
+        // Continue with other announcements
+      }
+    }
+    
+    // Sort by priority and created date (most recent first)
+    activeAnnouncements.sort((a, b) => {
+      if (a.priority !== b.priority) {
+        return (b.priority === 'high' ? 1 : 0) - (a.priority === 'high' ? 1 : 0);
+      }
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    });
+    
+    return c.json({ announcements: activeAnnouncements });
+  } catch (error) {
+    console.log('Get announcements error:', error);
+    // Return empty array instead of error to prevent breaking the login page
+    return c.json({ announcements: [] });
+  }
+});
+
+// Create or update announcement (Admin/Sub-Admin only)
+app.post('/make-server-81e5b189/announcements', async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    const { data: { user }, error: authError } = await supabase.auth.getUser(accessToken);
+    
+    if (!user) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    const userData = await kv.get(`users:${user.id}`);
+    if (!userData || (userData.role !== 'admin' && userData.role !== 'subadmin')) {
+      return c.json({ error: 'Only admin or sub-admin can create announcements' }, 403);
+    }
+
+    const body = await c.req.json();
+    const { id, title, message, priority, isActive } = body;
+
+    if (!title || !message) {
+      return c.json({ error: 'Title and message are required' }, 400);
+    }
+
+    const announcementId = id || generateId();
+    const announcement = {
+      id: announcementId,
+      title,
+      message,
+      priority: priority || 'normal', // 'high' or 'normal'
+      isActive: isActive !== undefined ? isActive : true,
+      createdBy: user.id,
+      createdByName: userData.name,
+      createdAt: id ? (await kv.get(`announcement:${announcementId}`))?.createdAt || new Date().toISOString() : new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      updatedBy: user.id
+    };
+
+    await kv.set(`announcement:${announcementId}`, announcement);
+
+    // Add to announcements list if new
+    if (!id) {
+      const announcements = await kv.get('announcements:list') || [];
+      if (!announcements.includes(announcementId)) {
+        announcements.push(announcementId);
+        await kv.set('announcements:list', announcements);
+      }
+    }
+
+    return c.json({ success: true, announcement });
+  } catch (error) {
+    console.log('Create announcement error:', error);
+    return c.json({ error: 'Failed to create announcement: ' + error.message }, 500);
+  }
+});
+
+// Get all announcements (Admin/Sub-Admin only - for management)
+app.get('/make-server-81e5b189/announcements/all', async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    const { data: { user }, error: authError } = await supabase.auth.getUser(accessToken);
+    
+    if (!user) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    const userData = await kv.get(`users:${user.id}`);
+    if (!userData || (userData.role !== 'admin' && userData.role !== 'subadmin')) {
+      return c.json({ error: 'Only admin or sub-admin can view all announcements' }, 403);
+    }
+
+    const announcements = await kv.get('announcements:list') || [];
+    const allAnnouncements = [];
+    
+    for (const id of announcements) {
+      const announcement = await kv.get(`announcement:${id}`);
+      if (announcement) {
+        allAnnouncements.push(announcement);
+      }
+    }
+    
+    // Sort by created date (most recent first)
+    allAnnouncements.sort((a, b) => 
+      new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+    
+    return c.json({ announcements: allAnnouncements });
+  } catch (error) {
+    console.log('Get all announcements error:', error);
+    return c.json({ error: 'Failed to get announcements: ' + error.message }, 500);
+  }
+});
+
+// Delete announcement (Admin/Sub-Admin only)
+app.delete('/make-server-81e5b189/announcements/:id', async (c) => {
+  try {
+    const accessToken = c.req.header('Authorization')?.split(' ')[1];
+    const { data: { user }, error: authError } = await supabase.auth.getUser(accessToken);
+    
+    if (!user) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    const userData = await kv.get(`users:${user.id}`);
+    if (!userData || (userData.role !== 'admin' && userData.role !== 'subadmin')) {
+      return c.json({ error: 'Only admin or sub-admin can delete announcements' }, 403);
+    }
+
+    const announcementId = c.req.param('id');
+    await kv.delete(`announcement:${announcementId}`);
+
+    // Remove from list
+    const announcements = await kv.get('announcements:list') || [];
+    const updatedList = announcements.filter((id: string) => id !== announcementId);
+    await kv.set('announcements:list', updatedList);
+
+    return c.json({ success: true });
+  } catch (error) {
+    console.log('Delete announcement error:', error);
+    return c.json({ error: 'Failed to delete announcement: ' + error.message }, 500);
   }
 });
 

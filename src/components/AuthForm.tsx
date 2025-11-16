@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { Textarea } from './ui/textarea';
 import { Badge } from './ui/badge';
-import { UserCircle, Briefcase, Shield, ShieldCheck, LogIn, UserPlus } from 'lucide-react';
+import { UserCircle, Briefcase, Shield, ShieldCheck, LogIn, UserPlus, Megaphone, X } from 'lucide-react';
 import { supabase, projectId, publicAnonKey } from '../utils/supabase/client';
 
 interface AuthFormProps {
@@ -20,6 +20,8 @@ export function AuthForm({ onAuthSuccess }: AuthFormProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [departments, setDepartments] = useState<any[]>([]);
+  const [announcements, setAnnouncements] = useState<any[]>([]);
+  const [dismissedAnnouncements, setDismissedAnnouncements] = useState<Set<string>>(new Set());
 
   // Load departments
   useEffect(() => {
@@ -33,6 +35,24 @@ export function AuthForm({ onAuthSuccess }: AuthFormProps) {
         }
       })
       .catch(console.error);
+  }, []);
+
+  // Load announcements
+  useEffect(() => {
+    fetch(`https://${projectId}.supabase.co/functions/v1/make-server-81e5b189/announcements`, {
+      headers: { 'Authorization': `Bearer ${publicAnonKey}` }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.announcements) {
+          setAnnouncements(data.announcements);
+        }
+      })
+      .catch((error) => {
+        console.error('Failed to load announcements:', error);
+        // Don't break the component if announcements fail to load
+        setAnnouncements([]);
+      });
   }, []);
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -128,9 +148,71 @@ export function AuthForm({ onAuthSuccess }: AuthFormProps) {
     }
   };
 
+  const handleDismissAnnouncement = (id: string) => {
+    setDismissedAnnouncements(prev => new Set([...prev, id]));
+  };
+
+  const visibleAnnouncements = announcements.filter(
+    ann => !dismissedAnnouncements.has(ann.id)
+  );
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-      <Card className="w-full max-w-2xl">
+      <div className="w-full max-w-2xl space-y-4">
+        {/* Announcements Section */}
+        {visibleAnnouncements.length > 0 && (
+          <div className="space-y-3">
+            {visibleAnnouncements.map((announcement) => (
+              <Card
+                key={announcement.id}
+                className={`border-2 ${
+                  announcement.priority === 'high'
+                    ? 'bg-red-50 border-red-300'
+                    : 'bg-blue-50 border-blue-300'
+                }`}
+              >
+                <CardContent className="p-4">
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-start gap-3 flex-1">
+                      <div className={`p-2 rounded-full ${
+                        announcement.priority === 'high'
+                          ? 'bg-red-100'
+                          : 'bg-blue-100'
+                      }`}>
+                        <Megaphone className={`size-5 ${
+                          announcement.priority === 'high'
+                            ? 'text-red-600'
+                            : 'text-blue-600'
+                        }`} />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-semibold mb-1">{announcement.title}</h3>
+                        <p className="text-sm text-gray-700 whitespace-pre-line">
+                          {announcement.message}
+                        </p>
+                        {announcement.createdByName && (
+                          <p className="text-xs text-gray-500 mt-2">
+                            - {announcement.createdByName}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-6 w-6 flex-shrink-0"
+                      onClick={() => handleDismissAnnouncement(announcement.id)}
+                    >
+                      <X className="size-4" />
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
+
+        <Card className="w-full">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
             <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-3 rounded-full">
@@ -366,6 +448,7 @@ export function AuthForm({ onAuthSuccess }: AuthFormProps) {
           )}
         </CardContent>
       </Card>
+      </div>
     </div>
   );
 }
