@@ -263,70 +263,74 @@ export function SubAdminDashboard({ accessToken, onLogout }: SubAdminDashboardPr
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div>
-            <h1 className="font-semibold">CivicEase - Sub-Admin Portal</h1>
-            <p className="text-sm text-muted-foreground">
-              {user?.departmentName || 'Department'} | {user?.name}
-            </p>
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <h1 className="font-semibold text-lg sm:text-xl">CivicEase - Sub-Admin Portal</h1>
+              <p className="text-xs sm:text-sm text-muted-foreground break-words">
+                {user?.departmentName || 'Department'} | {user?.name}
+              </p>
+            </div>
+            <Button onClick={onLogout} variant="outline" size="sm" className="min-h-[44px] text-xs sm:text-sm w-full sm:w-auto">
+              <LogOut className="size-3 sm:size-4 mr-1 sm:mr-2" />
+              <span className="hidden xs:inline">Logout</span>
+              <span className="xs:hidden">Out</span>
+            </Button>
           </div>
-          <Button onClick={onLogout} variant="outline" size="sm">
-            <LogOut className="size-4 mr-2" />
-            Logout
-          </Button>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 py-6">
+      <main className="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6">
         {/* Action Buttons */}
-        <div className="flex gap-3 mb-6">
+        <div className="flex gap-2 sm:gap-3 mb-4 sm:mb-6">
           <Button onClick={() => {
             setShowAnnouncements(true);
             loadAnnouncements();
-          }} variant="outline">
-            <Megaphone className="size-4 mr-2" />
-            Manage Announcements
+          }} variant="outline" className="min-h-[44px] text-sm sm:text-base">
+            <Megaphone className="size-3 sm:size-4 mr-1 sm:mr-2" />
+            <span className="hidden sm:inline">Manage Announcements</span>
+            <span className="sm:hidden">Announcements</span>
           </Button>
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
           <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="bg-yellow-100 p-3 rounded-lg">
-                  <FileText className="size-5 text-yellow-600" />
+            <CardContent className="p-3 sm:p-4">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="bg-yellow-100 p-2 sm:p-3 rounded-lg flex-shrink-0">
+                  <FileText className="size-4 sm:size-5 text-yellow-600" />
                 </div>
-                <div>
-                  <p className="text-2xl font-semibold">{newComplaints.length}</p>
-                  <p className="text-sm text-muted-foreground">New Complaints</p>
+                <div className="min-w-0">
+                  <p className="text-xl sm:text-2xl font-semibold">{newComplaints.length}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">New Complaints</p>
                 </div>
               </div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="bg-blue-100 p-3 rounded-lg">
-                  <Clock className="size-5 text-blue-600" />
+            <CardContent className="p-3 sm:p-4">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="bg-blue-100 p-2 sm:p-3 rounded-lg flex-shrink-0">
+                  <Clock className="size-4 sm:size-5 text-blue-600" />
                 </div>
-                <div>
-                  <p className="text-2xl font-semibold">{assignedComplaints.length}</p>
-                  <p className="text-sm text-muted-foreground">In Progress</p>
+                <div className="min-w-0">
+                  <p className="text-xl sm:text-2xl font-semibold">{assignedComplaints.length}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">In Progress</p>
                 </div>
               </div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="bg-green-100 p-3 rounded-lg">
-                  <CheckCircle className="size-5 text-green-600" />
+            <CardContent className="p-3 sm:p-4">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="bg-green-100 p-2 sm:p-3 rounded-lg flex-shrink-0">
+                  <CheckCircle className="size-4 sm:size-5 text-green-600" />
                 </div>
-                <div>
-                  <p className="text-2xl font-semibold">{completedComplaints.length}</p>
-                  <p className="text-sm text-muted-foreground">Completed</p>
+                <div className="min-w-0">
+                  <p className="text-xl sm:text-2xl font-semibold">{completedComplaints.length}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Completed</p>
                 </div>
               </div>
             </CardContent>
@@ -334,16 +338,22 @@ export function SubAdminDashboard({ accessToken, onLogout }: SubAdminDashboardPr
         </div>
 
         {/* Complaints Tabs */}
-        <Tabs defaultValue="new" className="space-y-4">
-          <TabsList>
-            <TabsTrigger value="new">
-              New Complaints
+        <Tabs defaultValue="new" className="space-y-3 sm:space-y-4">
+          <TabsList className="w-full grid grid-cols-3 h-auto">
+            <TabsTrigger value="new" className="text-xs sm:text-sm py-2 sm:py-2.5 px-2 sm:px-4">
+              <span className="hidden sm:inline">New Complaints</span>
+              <span className="sm:hidden">New</span>
               {newComplaints.length > 0 && (
-                <Badge className="ml-2 bg-yellow-600">{newComplaints.length}</Badge>
+                <Badge className="ml-1 sm:ml-2 bg-yellow-600 text-[10px] sm:text-xs">{newComplaints.length}</Badge>
               )}
             </TabsTrigger>
-            <TabsTrigger value="progress">In Progress</TabsTrigger>
-            <TabsTrigger value="completed">Completed</TabsTrigger>
+            <TabsTrigger value="progress" className="text-xs sm:text-sm py-2 sm:py-2.5 px-2 sm:px-4">
+              <span className="hidden sm:inline">In Progress</span>
+              <span className="sm:hidden">Progress</span>
+            </TabsTrigger>
+            <TabsTrigger value="completed" className="text-xs sm:text-sm py-2 sm:py-2.5 px-2 sm:px-4">
+              Completed
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="new" className="space-y-4">
@@ -355,7 +365,7 @@ export function SubAdminDashboard({ accessToken, onLogout }: SubAdminDashboardPr
                 </CardContent>
               </Card>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                 {newComplaints.map(complaint => (
                   <ComplaintCard
                     key={complaint.id}
@@ -377,7 +387,7 @@ export function SubAdminDashboard({ accessToken, onLogout }: SubAdminDashboardPr
                 </CardContent>
               </Card>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                 {assignedComplaints.map(complaint => (
                   <ComplaintCard
                     key={complaint.id}
@@ -390,16 +400,16 @@ export function SubAdminDashboard({ accessToken, onLogout }: SubAdminDashboardPr
             )}
           </TabsContent>
 
-          <TabsContent value="completed" className="space-y-4">
+          <TabsContent value="completed" className="space-y-3 sm:space-y-4">
             {completedComplaints.length === 0 ? (
               <Card>
-                <CardContent className="p-8 text-center">
-                  <CheckCircle className="size-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-muted-foreground">No completed complaints</p>
+                <CardContent className="p-6 sm:p-8 text-center">
+                  <CheckCircle className="size-10 sm:size-12 text-gray-400 mx-auto mb-3 sm:mb-4" />
+                  <p className="text-muted-foreground text-sm sm:text-base">No completed complaints</p>
                 </CardContent>
               </Card>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                 {completedComplaints.map(complaint => (
                   <ComplaintCard
                     key={complaint.id}
@@ -416,19 +426,19 @@ export function SubAdminDashboard({ accessToken, onLogout }: SubAdminDashboardPr
 
       {/* Complaint Details Dialog */}
       <Dialog open={!!selectedComplaint} onOpenChange={() => setSelectedComplaint(null)}>
-        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto mx-2 sm:mx-4">
           {selectedComplaint && (
             <>
               <DialogHeader>
-                <DialogTitle className="flex items-center gap-3">
+                <DialogTitle className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 text-lg sm:text-xl">
                   <span>Complaint Details</span>
-                  <Badge variant="outline" className="font-mono">
+                  <Badge variant="outline" className="font-mono text-xs sm:text-sm w-fit">
                     {selectedComplaint.token}
                   </Badge>
                 </DialogTitle>
               </DialogHeader>
               
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 {/* Complaint Details */}
                 <div>
                   <h4 className="font-medium mb-2">{selectedComplaint.complaintType}</h4>
@@ -436,22 +446,22 @@ export function SubAdminDashboard({ accessToken, onLogout }: SubAdminDashboardPr
                     {selectedComplaint.description}
                   </p>
 
-                  <div className="grid grid-cols-2 gap-4 text-sm mb-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm mb-3 sm:mb-4">
                     <div>
                       <span className="text-muted-foreground">Location:</span>
-                      <p className="font-medium">{selectedComplaint.location}</p>
+                      <p className="font-medium break-words">{selectedComplaint.location}</p>
                     </div>
                     <div>
                       <span className="text-muted-foreground">Priority:</span>
-                      <p className="font-medium capitalize">{selectedComplaint.priority}</p>
+                      <p className="font-medium capitalize break-words">{selectedComplaint.priority}</p>
                     </div>
                     <div>
                       <span className="text-muted-foreground">Citizen:</span>
-                      <p className="font-medium">{selectedComplaint.citizenName}</p>
+                      <p className="font-medium break-words">{selectedComplaint.citizenName}</p>
                     </div>
                     <div>
                       <span className="text-muted-foreground">Phone:</span>
-                      <p className="font-medium">{selectedComplaint.citizenPhone}</p>
+                      <p className="font-medium break-words">{selectedComplaint.citizenPhone}</p>
                     </div>
                   </div>
 
@@ -472,7 +482,7 @@ export function SubAdminDashboard({ accessToken, onLogout }: SubAdminDashboardPr
                   {selectedComplaint.photos && selectedComplaint.photos.length > 0 && (
                     <div className="mt-4">
                       <h5 className="font-medium mb-2">Photos ({selectedComplaint.photos.length})</h5>
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
                         {selectedComplaint.photos.map((photo: string, index: number) => (
                           <div key={index} className="aspect-square rounded-lg overflow-hidden border border-gray-200">
                             <img
@@ -497,14 +507,14 @@ export function SubAdminDashboard({ accessToken, onLogout }: SubAdminDashboardPr
                   <Card className="bg-blue-50 border-blue-200">
                     <CardContent className="p-4">
                       <h4 className="font-medium mb-2">Assigned Contractor</h4>
-                      <div className="grid grid-cols-2 gap-4 text-sm mb-3">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm mb-3">
                         <div>
                           <span className="text-muted-foreground">Name:</span>
-                          <p className="font-medium">{assignment.contractorName}</p>
+                          <p className="font-medium break-words">{assignment.contractorName}</p>
                         </div>
                         <div>
                           <span className="text-muted-foreground">Status:</span>
-                          <Badge className="capitalize">{assignment.contractorStatus}</Badge>
+                          <Badge className="capitalize text-xs sm:text-sm">{assignment.contractorStatus}</Badge>
                         </div>
                       </div>
                       {assignment.contractorPhone && (
@@ -542,7 +552,7 @@ export function SubAdminDashboard({ accessToken, onLogout }: SubAdminDashboardPr
                           <h5 className="font-medium mb-2 text-sm">
                             Completion Photos ({assignment.completionPhotos.length})
                           </h5>
-                          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
                             {assignment.completionPhotos.map((photo: string, index: number) => (
                               <div key={index} className="aspect-square rounded-lg overflow-hidden border border-gray-200">
                                 <img
@@ -645,18 +655,18 @@ export function SubAdminDashboard({ accessToken, onLogout }: SubAdminDashboardPr
 
       {/* Assign Contractor Dialog */}
       <Dialog open={showAssign} onOpenChange={setShowAssign}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className="max-w-2xl mx-2 sm:mx-4">
           <DialogHeader>
-            <DialogTitle>Assign to Contractor</DialogTitle>
-            <DialogDescription>
+            <DialogTitle className="text-lg sm:text-xl">Assign to Contractor</DialogTitle>
+            <DialogDescription className="text-xs sm:text-sm">
               Select a contractor and provide work details
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleAssignContractor} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="contractorId">Select Contractor</Label>
+          <form onSubmit={handleAssignContractor} className="space-y-3 sm:space-y-4">
+            <div className="space-y-1.5 sm:space-y-2">
+              <Label htmlFor="contractorId" className="text-sm sm:text-base">Select Contractor</Label>
               <Select name="contractorId" required>
-                <SelectTrigger>
+                <SelectTrigger className="min-h-[44px] text-sm sm:text-base">
                   <SelectValue placeholder="Choose contractor" />
                 </SelectTrigger>
                 <SelectContent>
@@ -674,48 +684,52 @@ export function SubAdminDashboard({ accessToken, onLogout }: SubAdminDashboardPr
               )}
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="estimatedFees">Estimated Fees (₹)</Label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+              <div className="space-y-1.5 sm:space-y-2">
+                <Label htmlFor="estimatedFees" className="text-sm sm:text-base">Estimated Fees (₹)</Label>
                 <Input
                   id="estimatedFees"
                   name="estimatedFees"
                   type="number"
                   placeholder="5000"
                   required
+                  className="min-h-[44px] text-sm sm:text-base"
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="estimatedTime">Estimated Time</Label>
+              <div className="space-y-1.5 sm:space-y-2">
+                <Label htmlFor="estimatedTime" className="text-sm sm:text-base">Estimated Time</Label>
                 <Input
                   id="estimatedTime"
                   name="estimatedTime"
                   type="text"
                   placeholder="e.g., 2-3 days"
                   required
+                  className="min-h-[44px] text-sm sm:text-base"
                 />
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="description">Work Instructions</Label>
+            <div className="space-y-1.5 sm:space-y-2">
+              <Label htmlFor="description" className="text-sm sm:text-base">Work Instructions</Label>
               <Textarea
                 id="description"
                 name="description"
                 placeholder="Provide detailed instructions for the contractor..."
                 rows={4}
                 required
+                className="text-sm sm:text-base min-h-[120px]"
               />
             </div>
 
-            <div className="flex gap-3">
-              <Button type="submit" className="flex-1" disabled={loading}>
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+              <Button type="submit" className="flex-1 min-h-[44px] text-sm sm:text-base" disabled={loading}>
                 {loading ? 'Assigning...' : 'Assign Contractor'}
               </Button>
               <Button 
                 type="button" 
                 variant="outline" 
                 onClick={() => setShowAssign(false)}
+                className="min-h-[44px] text-sm sm:text-base"
               >
                 Cancel
               </Button>
@@ -726,38 +740,38 @@ export function SubAdminDashboard({ accessToken, onLogout }: SubAdminDashboardPr
 
       {/* Announcements Management Dialog */}
       <Dialog open={showAnnouncements} onOpenChange={setShowAnnouncements}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto mx-2 sm:mx-4">
           <DialogHeader>
-            <DialogTitle>Manage Announcements</DialogTitle>
-            <DialogDescription>
+            <DialogTitle className="text-lg sm:text-xl">Manage Announcements</DialogTitle>
+            <DialogDescription className="text-xs sm:text-sm">
               Create and manage announcements that appear on the login/signup page
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <Button
               onClick={() => {
                 setEditingAnnouncement(null);
                 setShowAnnouncementForm(true);
               }}
-              className="w-full"
+              className="w-full min-h-[44px] text-sm sm:text-base"
             >
-              <Plus className="size-4 mr-2" />
+              <Plus className="size-3 sm:size-4 mr-1 sm:mr-2" />
               Create New Announcement
             </Button>
 
-            <div className="space-y-3">
+            <div className="space-y-2 sm:space-y-3">
               {announcements.length === 0 ? (
                 <Card>
-                  <CardContent className="p-8 text-center">
-                    <Megaphone className="size-12 text-gray-400 mx-auto mb-4" />
-                    <p className="text-muted-foreground">No announcements yet</p>
+                  <CardContent className="p-6 sm:p-8 text-center">
+                    <Megaphone className="size-10 sm:size-12 text-gray-400 mx-auto mb-3 sm:mb-4" />
+                    <p className="text-muted-foreground text-sm sm:text-base">No announcements yet</p>
                   </CardContent>
                 </Card>
               ) : (
                 announcements.map((announcement) => (
                   <Card key={announcement.id} className={announcement.isActive ? 'border-2 border-blue-300' : 'opacity-60'}>
-                    <CardContent className="p-4">
-                      <div className="flex items-start justify-between gap-4">
+                    <CardContent className="p-3 sm:p-4">
+                      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 sm:gap-4">
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
                             <h4 className="font-semibold">{announcement.title}</h4>
@@ -818,27 +832,28 @@ export function SubAdminDashboard({ accessToken, onLogout }: SubAdminDashboardPr
       }}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>
+            <DialogTitle className="text-lg sm:text-xl">
               {editingAnnouncement ? 'Edit Announcement' : 'Create New Announcement'}
             </DialogTitle>
-            <DialogDescription>
+            <DialogDescription className="text-xs sm:text-sm">
               This announcement will be displayed on the login/signup page
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleSaveAnnouncement} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="announcement-title">Title</Label>
+          <form onSubmit={handleSaveAnnouncement} className="space-y-3 sm:space-y-4">
+            <div className="space-y-1.5 sm:space-y-2">
+              <Label htmlFor="announcement-title" className="text-sm sm:text-base">Title</Label>
               <Input
                 id="announcement-title"
                 name="title"
                 placeholder="e.g., Important Notice"
                 defaultValue={editingAnnouncement?.title}
                 required
+                className="min-h-[44px] text-sm sm:text-base"
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="announcement-message">Message</Label>
+            <div className="space-y-1.5 sm:space-y-2">
+              <Label htmlFor="announcement-message" className="text-sm sm:text-base">Message</Label>
               <Textarea
                 id="announcement-message"
                 name="message"
@@ -846,13 +861,14 @@ export function SubAdminDashboard({ accessToken, onLogout }: SubAdminDashboardPr
                 rows={5}
                 defaultValue={editingAnnouncement?.message}
                 required
+                className="text-sm sm:text-base min-h-[120px]"
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="announcement-priority">Priority</Label>
+            <div className="space-y-1.5 sm:space-y-2">
+              <Label htmlFor="announcement-priority" className="text-sm sm:text-base">Priority</Label>
               <Select name="priority" defaultValue={editingAnnouncement?.priority || 'normal'}>
-                <SelectTrigger>
+                <SelectTrigger className="min-h-[44px] text-sm sm:text-base">
                   <SelectValue placeholder="Select priority" />
                 </SelectTrigger>
                 <SelectContent>
@@ -862,10 +878,10 @@ export function SubAdminDashboard({ accessToken, onLogout }: SubAdminDashboardPr
               </Select>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="announcement-active">Status</Label>
+            <div className="space-y-1.5 sm:space-y-2">
+              <Label htmlFor="announcement-active" className="text-sm sm:text-base">Status</Label>
               <Select name="isActive" defaultValue={editingAnnouncement?.isActive !== false ? 'true' : 'false'}>
-                <SelectTrigger>
+                <SelectTrigger className="min-h-[44px] text-sm sm:text-base">
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -875,8 +891,8 @@ export function SubAdminDashboard({ accessToken, onLogout }: SubAdminDashboardPr
               </Select>
             </div>
 
-            <div className="flex gap-3">
-              <Button type="submit" className="flex-1" disabled={loading}>
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+              <Button type="submit" className="flex-1 min-h-[44px] text-sm sm:text-base" disabled={loading}>
                 {loading ? 'Saving...' : editingAnnouncement ? 'Update' : 'Create'}
               </Button>
               <Button
@@ -886,6 +902,7 @@ export function SubAdminDashboard({ accessToken, onLogout }: SubAdminDashboardPr
                   setShowAnnouncementForm(false);
                   setEditingAnnouncement(null);
                 }}
+                className="min-h-[44px] text-sm sm:text-base"
               >
                 Cancel
               </Button>

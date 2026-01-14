@@ -78,10 +78,10 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+        <div className="text-center w-full max-w-sm">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading...</p>
+          <p className="text-muted-foreground text-sm sm:text-base">Loading...</p>
         </div>
       </div>
     );
@@ -94,11 +94,11 @@ export default function App() {
   // If we have accessToken but no userRole yet, show loading
   if (!userRole) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+        <div className="text-center w-full max-w-sm">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading your dashboard...</p>
-          <p className="text-sm text-gray-500 mt-2">If this takes too long, please refresh the page</p>
+          <p className="text-muted-foreground text-sm sm:text-base">Loading your dashboard...</p>
+          <p className="text-xs sm:text-sm text-gray-500 mt-2">If this takes too long, please refresh the page</p>
         </div>
       </div>
     );
@@ -116,13 +116,13 @@ export default function App() {
       return <MainAdminDashboard accessToken={accessToken} onLogout={handleLogout} />;
     default:
       return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50">
-          <div className="text-center">
-            <p className="text-red-600 mb-4">Unknown user role: {userRole}</p>
-            <p className="text-sm text-gray-600 mb-4">Access Token: {accessToken ? 'Present' : 'Missing'}</p>
+        <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+          <div className="text-center w-full max-w-sm">
+            <p className="text-red-600 mb-4 text-sm sm:text-base break-words">Unknown user role: {userRole}</p>
+            <p className="text-xs sm:text-sm text-gray-600 mb-4">Access Token: {accessToken ? 'Present' : 'Missing'}</p>
             <button
               onClick={handleLogout}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 text-sm sm:text-base min-h-[44px] min-w-[120px]"
             >
               Logout
             </button>

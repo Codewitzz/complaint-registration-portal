@@ -186,4 +186,75 @@
 
 html {
   font-size: var(--font-size);
+  /* Prevent horizontal scrolling on mobile */
+  overflow-x: hidden;
+  width: 100%;
+}
+
+body {
+  /* Prevent horizontal scrolling on mobile */
+  overflow-x: hidden;
+  width: 100%;
+  /* Ensure proper touch targets */
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Mobile-first responsive images */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Ensure buttons and interactive elements have proper touch targets on mobile */
+button,
+a,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+select {
+  min-height: 44px; /* Minimum touch target size */
+  min-width: 44px;
+}
+
+/* Responsive text scaling */
+@media (max-width: 640px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+@media (min-width: 641px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+/* Prevent text overflow on small screens */
+* {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Ensure dialogs are mobile-friendly */
+@media (max-width: 640px) {
+  [role="dialog"] {
+    margin: 0.5rem;
+    max-width: calc(100% - 1rem);
+  }
+}
+
+/* Improve form inputs on mobile */
+input,
+textarea,
+select {
+  font-size: 16px; /* Prevents zoom on iOS */
+}
+
+@media (min-width: 641px) {
+  input,
+  textarea,
+  select {
+    font-size: inherit;
+  }
 }

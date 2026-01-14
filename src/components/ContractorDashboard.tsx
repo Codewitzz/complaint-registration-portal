@@ -212,57 +212,60 @@ export function ContractorDashboard({ accessToken, onLogout }: ContractorDashboa
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div>
-            <h1 className="font-semibold">CivicEase - Contractor Portal</h1>
-            <p className="text-sm text-muted-foreground">Welcome, {user?.name}</p>
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <h1 className="font-semibold text-lg sm:text-xl">CivicEase - Contractor Portal</h1>
+              <p className="text-xs sm:text-sm text-muted-foreground">Welcome, {user?.name}</p>
+            </div>
+            <Button onClick={onLogout} variant="outline" size="sm" className="min-h-[44px] text-xs sm:text-sm w-full sm:w-auto">
+              <LogOut className="size-3 sm:size-4 mr-1 sm:mr-2" />
+              <span className="hidden xs:inline">Logout</span>
+              <span className="xs:hidden">Out</span>
+            </Button>
           </div>
-          <Button onClick={onLogout} variant="outline" size="sm">
-            <LogOut className="size-4 mr-2" />
-            Logout
-          </Button>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 py-6">
+      <main className="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6">
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-4 sm:mb-6">
           <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="bg-yellow-100 p-3 rounded-lg">
-                  <Briefcase className="size-5 text-yellow-600" />
+            <CardContent className="p-3 sm:p-4">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="bg-yellow-100 p-2 sm:p-3 rounded-lg flex-shrink-0">
+                  <Briefcase className="size-4 sm:size-5 text-yellow-600" />
                 </div>
-                <div>
-                  <p className="text-2xl font-semibold">{pendingAssignments.length}</p>
-                  <p className="text-sm text-muted-foreground">Pending Assignments</p>
+                <div className="min-w-0">
+                  <p className="text-xl sm:text-2xl font-semibold">{pendingAssignments.length}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Pending Assignments</p>
                 </div>
               </div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="bg-blue-100 p-3 rounded-lg">
-                  <Clock className="size-5 text-blue-600" />
+            <CardContent className="p-3 sm:p-4">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="bg-blue-100 p-2 sm:p-3 rounded-lg flex-shrink-0">
+                  <Clock className="size-4 sm:size-5 text-blue-600" />
                 </div>
-                <div>
-                  <p className="text-2xl font-semibold">{inProgress.length}</p>
-                  <p className="text-sm text-muted-foreground">In Progress</p>
+                <div className="min-w-0">
+                  <p className="text-xl sm:text-2xl font-semibold">{inProgress.length}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">In Progress</p>
                 </div>
               </div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="bg-green-100 p-3 rounded-lg">
-                  <CheckCircle className="size-5 text-green-600" />
+            <CardContent className="p-3 sm:p-4">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="bg-green-100 p-2 sm:p-3 rounded-lg flex-shrink-0">
+                  <CheckCircle className="size-4 sm:size-5 text-green-600" />
                 </div>
-                <div>
-                  <p className="text-2xl font-semibold">{completed.length}</p>
-                  <p className="text-sm text-muted-foreground">Completed</p>
+                <div className="min-w-0">
+                  <p className="text-xl sm:text-2xl font-semibold">{completed.length}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Completed</p>
                 </div>
               </div>
             </CardContent>
@@ -270,16 +273,22 @@ export function ContractorDashboard({ accessToken, onLogout }: ContractorDashboa
         </div>
 
         {/* Work Assignments */}
-        <Tabs defaultValue="pending" className="space-y-4">
-          <TabsList>
-            <TabsTrigger value="pending">
-              Pending Assignments
+        <Tabs defaultValue="pending" className="space-y-3 sm:space-y-4">
+          <TabsList className="w-full grid grid-cols-3 h-auto">
+            <TabsTrigger value="pending" className="text-xs sm:text-sm py-2 sm:py-2.5 px-2 sm:px-4">
+              <span className="hidden sm:inline">Pending Assignments</span>
+              <span className="sm:hidden">Pending</span>
               {pendingAssignments.length > 0 && (
-                <Badge className="ml-2 bg-yellow-600">{pendingAssignments.length}</Badge>
+                <Badge className="ml-1 sm:ml-2 bg-yellow-600 text-[10px] sm:text-xs">{pendingAssignments.length}</Badge>
               )}
             </TabsTrigger>
-            <TabsTrigger value="progress">In Progress</TabsTrigger>
-            <TabsTrigger value="completed">Completed</TabsTrigger>
+            <TabsTrigger value="progress" className="text-xs sm:text-sm py-2 sm:py-2.5 px-2 sm:px-4">
+              <span className="hidden sm:inline">In Progress</span>
+              <span className="sm:hidden">Progress</span>
+            </TabsTrigger>
+            <TabsTrigger value="completed" className="text-xs sm:text-sm py-2 sm:py-2.5 px-2 sm:px-4">
+              Completed
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="pending" className="space-y-4">
@@ -291,7 +300,7 @@ export function ContractorDashboard({ accessToken, onLogout }: ContractorDashboa
                 </CardContent>
               </Card>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                 {pendingAssignments.map(complaint => (
                   <ComplaintCard
                     key={complaint.id}
@@ -313,7 +322,7 @@ export function ContractorDashboard({ accessToken, onLogout }: ContractorDashboa
                 </CardContent>
               </Card>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                 {inProgress.map(complaint => (
                   <ComplaintCard
                     key={complaint.id}
@@ -326,16 +335,16 @@ export function ContractorDashboard({ accessToken, onLogout }: ContractorDashboa
             )}
           </TabsContent>
 
-          <TabsContent value="completed" className="space-y-4">
+          <TabsContent value="completed" className="space-y-3 sm:space-y-4">
             {completed.length === 0 ? (
               <Card>
-                <CardContent className="p-8 text-center">
-                  <CheckCircle className="size-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-muted-foreground">No completed work</p>
+                <CardContent className="p-6 sm:p-8 text-center">
+                  <CheckCircle className="size-10 sm:size-12 text-gray-400 mx-auto mb-3 sm:mb-4" />
+                  <p className="text-muted-foreground text-sm sm:text-base">No completed work</p>
                 </CardContent>
               </Card>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                 {completed.map(complaint => (
                   <ComplaintCard
                     key={complaint.id}
@@ -352,7 +361,7 @@ export function ContractorDashboard({ accessToken, onLogout }: ContractorDashboa
 
       {/* Assignment Details Dialog */}
       <Dialog open={!!selectedComplaint} onOpenChange={() => setSelectedComplaint(null)}>
-        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto mx-2 sm:mx-4">
           {selectedComplaint && assignment && (
             <>
               <DialogHeader>
@@ -370,14 +379,14 @@ export function ContractorDashboard({ accessToken, onLogout }: ContractorDashboa
                   <Card className="bg-yellow-50 border-yellow-200">
                     <CardContent className="p-4">
                       <h4 className="font-medium mb-2">New Assignment</h4>
-                      <div className="grid grid-cols-2 gap-4 text-sm mb-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm mb-3 sm:mb-4">
                         <div>
                           <span className="text-muted-foreground">Estimated Fees:</span>
-                          <p className="font-medium">₹{assignment.estimatedFees}</p>
+                          <p className="font-medium break-words">₹{assignment.estimatedFees}</p>
                         </div>
                         <div>
                           <span className="text-muted-foreground">Estimated Time:</span>
-                          <p className="font-medium">{assignment.estimatedTime}</p>
+                          <p className="font-medium break-words">{assignment.estimatedTime}</p>
                         </div>
                       </div>
                       {assignment.assignmentDescription && (
@@ -386,21 +395,22 @@ export function ContractorDashboard({ accessToken, onLogout }: ContractorDashboa
                           <p className="text-sm">{assignment.assignmentDescription}</p>
                         </div>
                       )}
-                      <div className="flex gap-3">
+                      <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                         <Button 
                           onClick={() => handleAccept(selectedComplaint.id)}
-                          className="flex-1"
+                          className="flex-1 min-h-[44px] text-sm sm:text-base"
                           disabled={loading}
                         >
-                          <Check className="size-4 mr-2" />
+                          <Check className="size-3 sm:size-4 mr-1 sm:mr-2" />
                           Accept Assignment
                         </Button>
                         <Button 
                           onClick={() => handleReject(selectedComplaint.id)}
                           variant="outline"
                           disabled={loading}
+                          className="min-h-[44px] text-sm sm:text-base"
                         >
-                          <X className="size-4 mr-2" />
+                          <X className="size-3 sm:size-4 mr-1 sm:mr-2" />
                           Reject
                         </Button>
                       </div>
@@ -415,14 +425,14 @@ export function ContractorDashboard({ accessToken, onLogout }: ContractorDashboa
                     {selectedComplaint.description}
                   </p>
 
-                  <div className="grid grid-cols-2 gap-4 text-sm mb-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm mb-3 sm:mb-4">
                     <div>
                       <span className="text-muted-foreground">Location:</span>
-                      <p className="font-medium">{selectedComplaint.location}</p>
+                      <p className="font-medium break-words">{selectedComplaint.location}</p>
                     </div>
                     <div>
                       <span className="text-muted-foreground">Citizen:</span>
-                      <p className="font-medium">{selectedComplaint.citizenName}</p>
+                      <p className="font-medium break-words">{selectedComplaint.citizenName}</p>
                     </div>
                   </div>
 
@@ -450,7 +460,7 @@ export function ContractorDashboard({ accessToken, onLogout }: ContractorDashboa
                   {selectedComplaint.photos && selectedComplaint.photos.length > 0 && (
                     <div className="mt-4">
                       <h5 className="font-medium mb-2">Photos ({selectedComplaint.photos.length})</h5>
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
                         {selectedComplaint.photos.map((photo: string, index: number) => (
                           <div key={index} className="aspect-square rounded-lg overflow-hidden border border-gray-200">
                             <img
@@ -480,9 +490,9 @@ export function ContractorDashboard({ accessToken, onLogout }: ContractorDashboa
                 {selectedComplaint.status === 'in_progress' && (
                   <Button 
                     onClick={() => setShowComplete(true)}
-                    className="w-full"
+                    className="w-full min-h-[44px] text-sm sm:text-base"
                   >
-                    <CheckCircle className="size-4 mr-2" />
+                    <CheckCircle className="size-3 sm:size-4 mr-1 sm:mr-2" />
                     Mark as Complete
                   </Button>
                 )}
@@ -494,27 +504,28 @@ export function ContractorDashboard({ accessToken, onLogout }: ContractorDashboa
 
       {/* Complete Work Dialog */}
       <Dialog open={showComplete} onOpenChange={setShowComplete}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto mx-2 sm:mx-4">
           <DialogHeader>
-            <DialogTitle>Mark Work as Complete</DialogTitle>
-            <DialogDescription>
+            <DialogTitle className="text-lg sm:text-xl">Mark Work as Complete</DialogTitle>
+            <DialogDescription className="text-xs sm:text-sm">
               Provide completion details and photos
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleComplete} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="completionNotes">Completion Notes</Label>
+          <form onSubmit={handleComplete} className="space-y-3 sm:space-y-4">
+            <div className="space-y-1.5 sm:space-y-2">
+              <Label htmlFor="completionNotes" className="text-sm sm:text-base">Completion Notes</Label>
               <Textarea
                 id="completionNotes"
                 name="completionNotes"
                 placeholder="Describe what work was completed..."
                 rows={4}
                 required
+                className="text-sm sm:text-base min-h-[120px]"
               />
             </div>
 
-            <div className="space-y-2">
-              <Label>Completion Photos (Required)</Label>
+            <div className="space-y-1.5 sm:space-y-2">
+              <Label className="text-sm sm:text-base">Completion Photos (Required)</Label>
               <ImageUpload
                 onImagesChange={(images) => setCompletionPhotos(images)}
                 maxImages={10}
@@ -527,10 +538,10 @@ export function ContractorDashboard({ accessToken, onLogout }: ContractorDashboa
               )}
             </div>
 
-            <div className="flex gap-3">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
               <Button 
                 type="submit" 
-                className="flex-1" 
+                className="flex-1 min-h-[44px] text-sm sm:text-base" 
                 disabled={loading || completionPhotos.length === 0}
               >
                 {loading ? 'Submitting...' : 'Submit & Complete'}
@@ -542,6 +553,7 @@ export function ContractorDashboard({ accessToken, onLogout }: ContractorDashboa
                   setShowComplete(false);
                   setCompletionPhotos([]);
                 }}
+                className="min-h-[44px] text-sm sm:text-base"
               >
                 Cancel
               </Button>

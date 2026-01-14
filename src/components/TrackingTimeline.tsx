@@ -16,21 +16,21 @@ export function TrackingTimeline({ timeline, currentStatus }: TrackingTimelinePr
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'pending':
-        return <Clock className="size-5 text-yellow-600" />;
+        return <Clock className="size-3 sm:size-5 text-yellow-600" />;
       case 'assigned_to_subadmin':
       case 'assigned_to_contractor':
-        return <AlertCircle className="size-5 text-blue-600" />;
+        return <AlertCircle className="size-3 sm:size-5 text-blue-600" />;
       case 'in_progress':
-        return <Clock className="size-5 text-orange-600" />;
+        return <Clock className="size-3 sm:size-5 text-orange-600" />;
       case 'completed':
-        return <CheckCircle className="size-5 text-green-600" />;
+        return <CheckCircle className="size-3 sm:size-5 text-green-600" />;
       case 'closed':
-        return <Check className="size-5 text-green-600" />;
+        return <Check className="size-3 sm:size-5 text-green-600" />;
       case 'contractor_rejected':
       case 'reopened':
-        return <XCircle className="size-5 text-red-600" />;
+        return <XCircle className="size-3 sm:size-5 text-red-600" />;
       default:
-        return <Clock className="size-5 text-gray-600" />;
+        return <Clock className="size-3 sm:size-5 text-gray-600" />;
     }
   };
 
@@ -74,37 +74,39 @@ export function TrackingTimeline({ timeline, currentStatus }: TrackingTimelinePr
   };
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="font-medium">Complaint Tracking</h3>
-        <Badge className={getStatusColor(currentStatus)}>
+    <div className="space-y-3 sm:space-y-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-4 mb-3 sm:mb-4">
+        <h3 className="font-medium text-sm sm:text-base">Complaint Tracking</h3>
+        <Badge className={`${getStatusColor(currentStatus)} text-xs sm:text-sm`}>
           {formatStatus(currentStatus)}
         </Badge>
       </div>
 
       <div className="relative">
         {/* Timeline line */}
-        <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gray-200" />
+        <div className="absolute left-3 sm:left-4 top-0 bottom-0 w-0.5 bg-gray-200" />
 
         {/* Timeline events */}
-        <div className="space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           {timeline.map((event, index) => (
-            <div key={index} className="relative flex gap-4 pl-0">
+            <div key={index} className="relative flex gap-2 sm:gap-4 pl-0">
               {/* Icon */}
-              <div className="relative z-10 flex-shrink-0 flex items-center justify-center size-8 bg-white border-2 border-gray-200 rounded-full">
-                {getStatusIcon(event.status)}
+              <div className="ml-2 relative z-10 flex-shrink-0 flex items-center justify-center size-6 sm:size-8 bg-white border-2 border-gray-200 rounded-full">
+                <div className="size-3 sm:size-5">
+                  {getStatusIcon(event.status)}
+                </div>
               </div>
 
               {/* Content */}
-              <div className="flex-1 pb-6">
-                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-                  <div className="flex items-start justify-between gap-4 mb-2">
-                    <p className="font-medium">{event.message}</p>
-                    <Badge variant="outline" className="text-xs whitespace-nowrap">
+              <div className="flex-1 pb-4 sm:pb-6 min-w-0">
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-2 sm:p-4">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-4 mb-1 sm:mb-2">
+                    <p className="p-3 font-medium text-xs sm:text-sm break-words">{event.message}</p>
+                    <Badge variant="outline" className="text-[10px] mt-2 ml-2 mr-2 sm:text-xs whitespace-nowrap w-fit">
                       {formatStatus(event.status)}
                     </Badge>
                   </div>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-xs p-3 sm:text-sm text-muted-foreground break-words">
                     {formatDate(event.timestamp)}
                   </p>
                 </div>
@@ -115,16 +117,18 @@ export function TrackingTimeline({ timeline, currentStatus }: TrackingTimelinePr
       </div>
 
       {/* Current Status Indicator */}
-      <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg">
-        <div className="flex items-center gap-3">
+      <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg">
+        <div className="flex items-center gap-2 sm:gap-3">
           <div className="flex-shrink-0">
-            {getStatusIcon(currentStatus)}
+            <div className="size-4 sm:size-5">
+              {getStatusIcon(currentStatus)}
+            </div>
           </div>
-          <div>
-            <p className="text-sm">
+          <div className="min-w-0 flex-1">
+            <p className="text-xs sm:text-sm break-words">
               <strong>Current Status:</strong> {formatStatus(currentStatus)}
             </p>
-            <p className="text-xs text-muted-foreground mt-1">
+            <p className="text-[10px] sm:text-xs text-muted-foreground mt-1 break-words">
               Last updated: {formatDate(timeline[timeline.length - 1]?.timestamp || new Date().toISOString())}
             </p>
           </div>

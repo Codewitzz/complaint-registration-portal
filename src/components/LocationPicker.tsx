@@ -117,18 +117,19 @@ export function LocationPicker({ onLocationChange, initialLocation }: LocationPi
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center gap-2">
-        <Label>Location</Label>
+      <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+        <Label className="text-sm sm:text-base">Location</Label>
         <Button
           type="button"
           variant="outline"
           size="sm"
           onClick={handleGetCurrentLocation}
           disabled={loading}
-          className="ml-auto"
+          className="sm:ml-auto min-h-[44px] text-xs sm:text-sm"
         >
-          <Navigation className="size-4 mr-2" />
-          {loading ? 'Getting location...' : 'Use Current Location'}
+          <Navigation className="size-3 sm:size-4 mr-1 sm:mr-2" />
+          <span className="hidden sm:inline">{loading ? 'Getting location...' : 'Use Current Location'}</span>
+          <span className="sm:hidden">{loading ? 'Getting...' : 'Current Location'}</span>
         </Button>
       </div>
 
@@ -138,12 +139,13 @@ export function LocationPicker({ onLocationChange, initialLocation }: LocationPi
         </div>
       )}
 
-      <div className="border rounded-lg overflow-hidden" style={{ height: '300px' }}>
+      <div className="border rounded-lg overflow-hidden" style={{ height: '250px', minHeight: '250px' }}>
         <MapContainer
           center={mapCenter}
           zoom={position ? 15 : 10}
           style={{ height: '100%', width: '100%' }}
           key={`${mapCenter[0]}-${mapCenter[1]}`}
+          className="w-full"
         >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

@@ -157,8 +157,8 @@ export function AuthForm({ onAuthSuccess }: AuthFormProps) {
   );
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-      <div className="w-full max-w-2xl space-y-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-3 sm:p-4">
+      <div className="w-full max-w-2xl space-y-3 sm:space-y-4">
         {/* Announcements Section */}
         {visibleAnnouncements.length > 0 && (
           <div className="space-y-3">
@@ -213,104 +213,108 @@ export function AuthForm({ onAuthSuccess }: AuthFormProps) {
         )}
 
         <Card className="w-full">
-        <CardHeader className="text-center">
-          <div className="flex justify-center mb-4">
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-3 rounded-full">
-              <ShieldCheck className="size-8 text-white" />
+        <CardHeader className="text-center px-4 sm:px-6 pt-4 sm:pt-6">
+          <div className="flex justify-center mb-3 sm:mb-4">
+            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-2 sm:p-3 rounded-full">
+              <ShieldCheck className="size-6 sm:size-8 text-white" />
             </div>
           </div>
-          <CardTitle className="text-3xl">CivicEase Portal</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-2xl sm:text-3xl">CivicEase Portal</CardTitle>
+          <CardDescription className="text-sm sm:text-base">
             Civic Complaint Management System
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-4 sm:px-6 pb-4 sm:pb-6">
           <Tabs value={isLogin ? 'login' : 'signup'} onValueChange={(v) => setIsLogin(v === 'login')}>
-            <TabsList className="grid w-full grid-cols-2 mb-6">
-              <TabsTrigger value="login" className="flex items-center gap-2">
-                <LogIn className="size-4" />
-                Login
+            <TabsList className="grid w-full grid-cols-2 mb-4 sm:mb-6 h-auto">
+              <TabsTrigger value="login" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm py-2 sm:py-2.5">
+                <LogIn className="size-3 sm:size-4" />
+                <span className="hidden xs:inline">Login</span>
+                <span className="xs:hidden">Login</span>
               </TabsTrigger>
-              <TabsTrigger value="signup" className="flex items-center gap-2">
-                <UserPlus className="size-4" />
-                Sign Up
+              <TabsTrigger value="signup" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm py-2 sm:py-2.5">
+                <UserPlus className="size-3 sm:size-4" />
+                <span className="hidden xs:inline">Sign Up</span>
+                <span className="xs:hidden">Sign Up</span>
               </TabsTrigger>
             </TabsList>
 
             {/* User Type Selection */}
-            <div className="mb-6">
-              <Label className="mb-3 block">I am a:</Label>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div className="mb-4 sm:mb-6">
+              <Label className="mb-2 sm:mb-3 block text-sm sm:text-base">I am a:</Label>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
                 <Button
                   type="button"
                   variant={userType === 'citizen' ? 'default' : 'outline'}
                   onClick={() => setUserType('citizen')}
-                  className="flex flex-col items-center gap-2 h-auto py-4"
+                  className="flex flex-col items-center gap-1 sm:gap-2 h-auto py-3 sm:py-4 min-h-[80px] sm:min-h-[100px]"
                 >
-                  <UserCircle className="size-6" />
+                  <UserCircle className="size-5 sm:size-6" />
                   <span className="text-xs">Citizen</span>
                 </Button>
                 <Button
                   type="button"
                   variant={userType === 'contractor' ? 'default' : 'outline'}
                   onClick={() => setUserType('contractor')}
-                  className="flex flex-col items-center gap-2 h-auto py-4"
+                  className="flex flex-col items-center gap-1 sm:gap-2 h-auto py-3 sm:py-4 min-h-[80px] sm:min-h-[100px]"
                 >
-                  <Briefcase className="size-6" />
+                  <Briefcase className="size-5 sm:size-6" />
                   <span className="text-xs">Contractor</span>
                 </Button>
                 <Button
                   type="button"
                   variant={userType === 'subadmin' ? 'default' : 'outline'}
                   onClick={() => setUserType('subadmin')}
-                  className="flex flex-col items-center gap-2 h-auto py-4"
+                  className="flex flex-col items-center gap-1 sm:gap-2 h-auto py-3 sm:py-4 min-h-[80px] sm:min-h-[100px]"
                   disabled={!isLogin}
                   title={isLogin ? "Login as Sub-Admin" : "Sub-admins are created by Main Admin"}
                 >
-                  <Shield className="size-6" />
+                  <Shield className="size-5 sm:size-6" />
                   <span className="text-xs">Sub-Admin</span>
                 </Button>
                 <Button
                   type="button"
                   variant={userType === 'admin' ? 'default' : 'outline'}
                   onClick={() => setUserType('admin')}
-                  className="flex flex-col items-center gap-2 h-auto py-4"
+                  className="flex flex-col items-center gap-1 sm:gap-2 h-auto py-3 sm:py-4 min-h-[80px] sm:min-h-[100px]"
                 >
-                  <ShieldCheck className="size-6" />
+                  <ShieldCheck className="size-5 sm:size-6" />
                   <span className="text-xs">Admin</span>
                 </Button>
               </div>
             </div>
 
             {/* Login Form */}
-            <TabsContent value="login">
-              <form onSubmit={handleLogin} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="login-email">Email</Label>
+          <TabsContent value="login">
+              <form onSubmit={handleLogin} className="space-y-3 sm:space-y-4">
+                <div className="space-y-1.5 sm:space-y-2">
+                  <Label htmlFor="login-email" className="text-sm sm:text-base">Email</Label>
                   <Input
                     id="login-email"
                     name="email"
                     type="email"
                     placeholder="your.email@example.com"
                     required
+                    className="text-sm sm:text-base min-h-[44px]"
                   />
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="login-password">Password</Label>
+                <div className="space-y-1.5 sm:space-y-2">
+                  <Label htmlFor="login-password" className="text-sm sm:text-base">Password</Label>
                   <Input
                     id="login-password"
                     name="password"
                     type="password"
                     placeholder="••••••••"
                     required
+                    className="text-sm sm:text-base min-h-[44px]"
                   />
                 </div>
                 {error && (
-                  <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-md text-sm">
+                  <div className="bg-red-50 border border-red-200 text-red-800 px-3 sm:px-4 py-2 sm:py-3 rounded-md text-xs sm:text-sm">
                     {error}
                   </div>
                 )}
-                <Button type="submit" className="w-full" disabled={loading}>
+                <Button type="submit" className="w-full min-h-[44px] text-sm sm:text-base" disabled={loading}>
                   {loading ? 'Logging in...' : 'Login'}
                 </Button>
               </form>
@@ -318,41 +322,44 @@ export function AuthForm({ onAuthSuccess }: AuthFormProps) {
 
             {/* Signup Form */}
             <TabsContent value="signup">
-              <form onSubmit={handleSignup} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="signup-name">Full Name</Label>
+              <form onSubmit={handleSignup} className="space-y-3 sm:space-y-4">
+                <div className="space-y-1.5 sm:space-y-2">
+                  <Label htmlFor="signup-name" className="text-sm sm:text-base">Full Name</Label>
                   <Input
                     id="signup-name"
                     name="name"
                     type="text"
                     placeholder="John Doe"
                     required
+                    className="text-sm sm:text-base min-h-[44px]"
                   />
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-email">Email</Label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <Label htmlFor="signup-email" className="text-sm sm:text-base">Email</Label>
                     <Input
                       id="signup-email"
                       name="email"
                       type="email"
                       placeholder="your.email@example.com"
                       required
+                      className="text-sm sm:text-base min-h-[44px]"
                     />
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-phone">Phone Number</Label>
+                  <div className="space-y-1.5 sm:space-y-2">
+                    <Label htmlFor="signup-phone" className="text-sm sm:text-base">Phone Number</Label>
                     <Input
                       id="signup-phone"
                       name="phone"
                       type="tel"
                       placeholder="+91 9876543210"
                       required
+                      className="text-sm sm:text-base min-h-[44px]"
                     />
                   </div>
                 </div>
-                <div className="space-y-2">
-                  <Label htmlFor="signup-password">Password</Label>
+                <div className="space-y-1.5 sm:space-y-2">
+                  <Label htmlFor="signup-password" className="text-sm sm:text-base">Password</Label>
                   <Input
                     id="signup-password"
                     name="password"
@@ -360,6 +367,7 @@ export function AuthForm({ onAuthSuccess }: AuthFormProps) {
                     placeholder="••••••••"
                     required
                     minLength={6}
+                    className="text-sm sm:text-base min-h-[44px]"
                   />
                 </div>
 
@@ -427,11 +435,11 @@ export function AuthForm({ onAuthSuccess }: AuthFormProps) {
                 )}
 
                 {error && (
-                  <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-md text-sm">
+                  <div className="bg-red-50 border border-red-200 text-red-800 px-3 sm:px-4 py-2 sm:py-3 rounded-md text-xs sm:text-sm">
                     {error}
                   </div>
                 )}
-                <Button type="submit" className="w-full" disabled={loading}>
+                <Button type="submit" className="w-full min-h-[44px] text-sm sm:text-base" disabled={loading}>
                   {loading ? 'Creating account...' : 'Sign Up'}
                 </Button>
               </form>
@@ -439,8 +447,8 @@ export function AuthForm({ onAuthSuccess }: AuthFormProps) {
           </Tabs>
 
           {userType === 'subadmin' && !isLogin && (
-            <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-md">
-              <p className="text-sm text-blue-800">
+            <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-blue-50 border border-blue-200 rounded-md">
+              <p className="text-xs sm:text-sm text-blue-800">
                 <strong>Note:</strong> Sub-admin accounts are created by the Main Admin. 
                 If you're a department head, please contact the Main Admin to create your account.
               </p>

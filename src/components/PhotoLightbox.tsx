@@ -53,15 +53,15 @@ export function PhotoLightbox({ images, initialIndex = 0, isOpen, onClose }: Pho
       className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90"
       onClick={onClose}
     >
-      <div className="relative max-w-7xl max-h-[95vh] w-full h-full flex items-center justify-center p-4">
+      <div className="relative max-w-7xl max-h-[95vh] w-full h-full flex items-center justify-center p-2 sm:p-4">
         {/* Close Button */}
         <Button
           variant="ghost"
           size="icon"
-          className="absolute top-4 right-4 z-10 text-white hover:bg-white/20"
+          className="absolute top-2 right-2 sm:top-4 sm:right-4 z-10 text-white hover:bg-white/20 min-h-[44px] min-w-[44px]"
           onClick={onClose}
         >
-          <X className="size-6" />
+          <X className="size-5 sm:size-6" />
         </Button>
 
         {/* Previous Button */}
@@ -69,25 +69,25 @@ export function PhotoLightbox({ images, initialIndex = 0, isOpen, onClose }: Pho
           <Button
             variant="ghost"
             size="icon"
-            className="absolute left-4 z-10 text-white hover:bg-white/20"
+            className="absolute left-2 sm:left-4 z-10 text-white hover:bg-white/20 min-h-[44px] min-w-[44px]"
             onClick={(e) => {
               e.stopPropagation();
               handlePrevious();
             }}
           >
-            <ChevronLeft className="size-8" />
+            <ChevronLeft className="size-6 sm:size-8" />
           </Button>
         )}
 
         {/* Image */}
         <div
-          className="relative max-w-full max-h-full"
+          className="relative max-w-full max-h-full px-8 sm:px-12"
           onClick={(e) => e.stopPropagation()}
         >
           <img
             src={images[currentIndex]}
             alt={`Photo ${currentIndex + 1} of ${images.length}`}
-            className="max-w-full max-h-[95vh] object-contain rounded-lg"
+            className="max-w-full max-h-[85vh] sm:max-h-[95vh] object-contain rounded-lg"
           />
         </div>
 
@@ -96,26 +96,26 @@ export function PhotoLightbox({ images, initialIndex = 0, isOpen, onClose }: Pho
           <Button
             variant="ghost"
             size="icon"
-            className="absolute right-4 z-10 text-white hover:bg-white/20"
+            className="absolute right-2 sm:right-4 z-10 text-white hover:bg-white/20 min-h-[44px] min-w-[44px]"
             onClick={(e) => {
               e.stopPropagation();
               handleNext();
             }}
           >
-            <ChevronRight className="size-8" />
+            <ChevronRight className="size-6 sm:size-8" />
           </Button>
         )}
 
         {/* Image Counter */}
         {images.length > 1 && (
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 bg-black/50 text-white px-4 py-2 rounded-full text-sm">
+          <div className="absolute bottom-12 sm:bottom-16 left-1/2 transform -translate-x-1/2 bg-black/50 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm">
             {currentIndex + 1} / {images.length}
           </div>
         )}
 
         {/* Thumbnail Strip */}
         {images.length > 1 && (
-          <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 flex gap-2 max-w-full overflow-x-auto px-4">
+          <div className="absolute bottom-2 sm:bottom-4 left-1/2 transform -translate-x-1/2 flex gap-1.5 sm:gap-2 max-w-[calc(100%-2rem)] sm:max-w-full overflow-x-auto px-2 sm:px-4 pb-1">
             {images.map((img, index) => (
               <button
                 key={index}
@@ -123,7 +123,7 @@ export function PhotoLightbox({ images, initialIndex = 0, isOpen, onClose }: Pho
                   e.stopPropagation();
                   setCurrentIndex(index);
                 }}
-                className={`flex-shrink-0 w-16 h-16 rounded overflow-hidden border-2 transition-all ${
+                className={`flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded overflow-hidden border-2 transition-all min-h-[48px] min-w-[48px] sm:min-h-[64px] sm:min-w-[64px] ${
                   index === currentIndex
                     ? 'border-white scale-110'
                     : 'border-transparent opacity-60 hover:opacity-100'

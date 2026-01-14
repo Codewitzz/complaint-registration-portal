@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -18,27 +19,41 @@ interface LocationMapProps {
 }
 
 export function LocationMap({ latitude, longitude, address, height = '300px' }: LocationMapProps) {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   if (!latitude || !longitude) {
     return (
-      <div className="border rounded-lg p-6 text-center" style={{ height }}>
-        <p className="text-muted-foreground">Location coordinates not available</p>
+      <div className="border rounded-lg p-4 sm:p-6 text-center flex items-center justify-center" style={{ minHeight: '200px', height: 'auto' }}>
+        <p className="text-xs sm:text-sm text-muted-foreground">Location coordinates not available</p>
       </div>
     );
   }
 
+  const mapHeight = isMobile ? '250px' : height;
+
   return (
     <div className="space-y-2">
       {address && (
-        <p className="text-sm text-muted-foreground">
+        <p className="text-xs sm:text-sm text-muted-foreground break-words">
           <strong>Address:</strong> {address}
         </p>
       )}
-      <div className="border rounded-lg overflow-hidden" style={{ height }}>
+      <div className="border rounded-lg overflow-hidden w-full" style={{ height: mapHeight, minHeight: '200px' }}>
         <MapContainer
           center={[latitude, longitude]}
           zoom={15}
           style={{ height: '100%', width: '100%' }}
           scrollWheelZoom={false}
+          className="w-full h-full"
         >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -47,7 +62,7 @@ export function LocationMap({ latitude, longitude, address, height = '300px' }: 
           <Marker position={[latitude, longitude]} />
         </MapContainer>
       </div>
-      <p className="text-xs text-muted-foreground">
+      <p className="text-[10px] sm:text-xs text-muted-foreground break-words">
         Coordinates: {latitude.toFixed(6)}, {longitude.toFixed(6)}
       </p>
     </div>

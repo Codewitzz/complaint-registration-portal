@@ -109,11 +109,11 @@ export function ImageUpload({ onImagesChange, maxImages = 5, maxSizeMB = 5 }: Im
   };
 
   return (
-    <div className="space-y-3">
-      <Label>Photos (Optional)</Label>
+    <div className="space-y-2 sm:space-y-3">
+      <Label className="text-sm sm:text-base">Photos (Optional)</Label>
       
       {error && (
-        <div className="text-sm text-red-600 bg-red-50 p-2 rounded">
+        <div className="text-xs sm:text-sm text-red-600 bg-red-50 p-2 sm:p-3 rounded break-words">
           {error}
         </div>
       )}
@@ -129,20 +129,20 @@ export function ImageUpload({ onImagesChange, maxImages = 5, maxSizeMB = 5 }: Im
 
       {images.length === 0 ? (
         <div
-          className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center cursor-pointer hover:border-gray-400 transition-colors"
+          className="border-2 border-dashed border-gray-300 rounded-lg p-4 sm:p-6 text-center cursor-pointer hover:border-gray-400 transition-colors min-h-[120px] sm:min-h-[150px] flex flex-col items-center justify-center"
           onClick={handleClick}
         >
-          <Upload className="size-8 text-gray-400 mx-auto mb-2" />
-          <p className="text-sm text-muted-foreground mb-1">
+          <Upload className="size-6 sm:size-8 text-gray-400 mx-auto mb-2" />
+          <p className="text-xs sm:text-sm text-muted-foreground mb-1 break-words">
             Click to upload images or drag and drop
           </p>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-[10px] sm:text-xs text-muted-foreground break-words">
             Maximum {maxImages} images, {maxSizeMB}MB each
           </p>
         </div>
       ) : (
-        <div className="space-y-3">
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+        <div className="space-y-2 sm:space-y-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
             {images.map((image, index) => (
               <div key={index} className="relative group">
                 <div className="aspect-square rounded-lg overflow-hidden border border-gray-200">
@@ -155,9 +155,10 @@ export function ImageUpload({ onImagesChange, maxImages = 5, maxSizeMB = 5 }: Im
                 <button
                   type="button"
                   onClick={() => handleRemoveImage(index)}
-                  className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                  className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 sm:p-1.5 opacity-70 sm:opacity-0 group-hover:opacity-100 transition-opacity min-h-[32px] min-w-[32px] flex items-center justify-center"
+                  aria-label="Remove image"
                 >
-                  <X className="size-4" />
+                  <X className="size-3 sm:size-4" />
                 </button>
               </div>
             ))}
@@ -168,10 +169,11 @@ export function ImageUpload({ onImagesChange, maxImages = 5, maxSizeMB = 5 }: Im
               type="button"
               variant="outline"
               onClick={handleClick}
-              className="w-full"
+              className="w-full min-h-[44px] text-xs sm:text-sm"
             >
-              <ImageIcon className="size-4 mr-2" />
-              Add More Images ({images.length}/{maxImages})
+              <ImageIcon className="size-3 sm:size-4 mr-1 sm:mr-2" />
+              <span className="hidden sm:inline">Add More Images ({images.length}/{maxImages})</span>
+              <span className="sm:hidden">Add More ({images.length}/{maxImages})</span>
             </Button>
           )}
         </div>

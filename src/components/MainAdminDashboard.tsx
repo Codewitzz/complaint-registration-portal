@@ -473,115 +473,122 @@ export function MainAdminDashboard({ accessToken, onLogout }: MainAdminDashboard
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div>
-            <h1 className="font-semibold text-xl">CivicEase - Main Admin</h1>
-            <p className="text-sm text-blue-100">Welcome, {user?.name}</p>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button 
-              onClick={handleManualRefresh}
-              variant="secondary" 
-              size="sm"
-              disabled={isRefreshing}
-            >
-              <RefreshCw className={`size-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
-              {isRefreshing ? 'Refreshing...' : 'Refresh'}
-            </Button>
-            {newComplaintsCount > 0 && (
-              <div className="relative">
-                <Button 
-                  onClick={() => setNewComplaintsCount(0)}
-                  variant="secondary" 
-                  size="sm"
-                  className="animate-pulse bg-green-500 hover:bg-green-600 text-white"
-                >
-                  <Bell className="size-4 mr-2" />
-                  {newComplaintsCount} New!
-                </Button>
-              </div>
-            )}
-            <Button 
-              onClick={() => setShowDeptInfo(true)} 
-              variant="secondary" 
-              size="sm"
-            >
-              <Building2 className="size-4 mr-2" />
-              Departments
-            </Button>
-            <Button onClick={onLogout} variant="secondary" size="sm">
-              <LogOut className="size-4 mr-2" />
-              Logout
-            </Button>
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div>
+              <h1 className="font-semibold text-lg sm:text-xl">CivicEase - Main Admin</h1>
+              <p className="text-xs sm:text-sm text-blue-100">Welcome, {user?.name}</p>
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <Button 
+                onClick={handleManualRefresh}
+                variant="secondary" 
+                size="sm"
+                disabled={isRefreshing}
+                className="min-h-[44px] text-xs sm:text-sm"
+              >
+                <RefreshCw className={`size-3 sm:size-4 mr-1 sm:mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
+                <span className="hidden xs:inline">{isRefreshing ? 'Refreshing...' : 'Refresh'}</span>
+                <span className="xs:hidden">{isRefreshing ? '...' : '↻'}</span>
+              </Button>
+              {newComplaintsCount > 0 && (
+                <div className="relative">
+                  <Button 
+                    onClick={() => setNewComplaintsCount(0)}
+                    variant="secondary" 
+                    size="sm"
+                    className="animate-pulse bg-green-500 hover:bg-green-600 text-white min-h-[44px] text-xs sm:text-sm"
+                  >
+                    <Bell className="size-3 sm:size-4 mr-1 sm:mr-2" />
+                    {newComplaintsCount} New!
+                  </Button>
+                </div>
+              )}
+              <Button 
+                onClick={() => setShowDeptInfo(true)} 
+                variant="secondary" 
+                size="sm"
+                className="min-h-[44px] text-xs sm:text-sm"
+              >
+                <Building2 className="size-3 sm:size-4 mr-1 sm:mr-2" />
+                <span className="hidden sm:inline">Departments</span>
+                <span className="sm:hidden">Dept</span>
+              </Button>
+              <Button onClick={onLogout} variant="secondary" size="sm" className="min-h-[44px] text-xs sm:text-sm">
+                <LogOut className="size-3 sm:size-4 mr-1 sm:mr-2" />
+                <span className="hidden xs:inline">Logout</span>
+                <span className="xs:hidden">Out</span>
+              </Button>
+            </div>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 py-6">
+      <main className="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6">
         {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 mb-4 sm:mb-6">
           <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="bg-blue-100 p-3 rounded-lg">
-                  <FileText className="size-5 text-blue-600" />
+            <CardContent className="p-3 sm:p-4">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="bg-blue-100 p-2 sm:p-3 rounded-lg flex-shrink-0">
+                  <FileText className="size-4 sm:size-5 text-blue-600" />
                 </div>
-                <div>
-                  <p className="text-2xl font-semibold">{complaints.length}</p>
-                  <p className="text-sm text-muted-foreground">Total Complaints</p>
+                <div className="min-w-0">
+                  <p className="text-xl sm:text-2xl font-semibold">{complaints.length}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Total Complaints</p>
                 </div>
               </div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="bg-yellow-100 p-3 rounded-lg">
-                  <FileText className="size-5 text-yellow-600" />
+            <CardContent className="p-3 sm:p-4">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="bg-yellow-100 p-2 sm:p-3 rounded-lg flex-shrink-0">
+                  <FileText className="size-4 sm:size-5 text-yellow-600" />
                 </div>
-                <div>
-                  <p className="text-2xl font-semibold">{pendingComplaints.length}</p>
-                  <p className="text-sm text-muted-foreground">Pending</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="bg-blue-100 p-3 rounded-lg">
-                  <FileText className="size-5 text-blue-600" />
-                </div>
-                <div>
-                  <p className="text-2xl font-semibold">{assignedComplaints.length}</p>
-                  <p className="text-sm text-muted-foreground">In Progress</p>
+                <div className="min-w-0">
+                  <p className="text-xl sm:text-2xl font-semibold">{pendingComplaints.length}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Pending</p>
                 </div>
               </div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="bg-green-100 p-3 rounded-lg">
-                  <FileText className="size-5 text-green-600" />
+            <CardContent className="p-3 sm:p-4">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="bg-blue-100 p-2 sm:p-3 rounded-lg flex-shrink-0">
+                  <FileText className="size-4 sm:size-5 text-blue-600" />
                 </div>
-                <div>
-                  <p className="text-2xl font-semibold">{completedComplaints.length}</p>
-                  <p className="text-sm text-muted-foreground">Completed</p>
+                <div className="min-w-0">
+                  <p className="text-xl sm:text-2xl font-semibold">{assignedComplaints.length}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">In Progress</p>
                 </div>
               </div>
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center gap-3">
-                <div className="bg-purple-100 p-3 rounded-lg">
-                  <Users className="size-5 text-purple-600" />
+            <CardContent className="p-3 sm:p-4">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="bg-green-100 p-2 sm:p-3 rounded-lg flex-shrink-0">
+                  <FileText className="size-4 sm:size-5 text-green-600" />
                 </div>
-                <div>
-                  <p className="text-2xl font-semibold">{subAdmins.length}</p>
-                  <p className="text-sm text-muted-foreground">Sub-Admins</p>
+                <div className="min-w-0">
+                  <p className="text-xl sm:text-2xl font-semibold">{completedComplaints.length}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Completed</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="p-3 sm:p-4">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="bg-purple-100 p-2 sm:p-3 rounded-lg flex-shrink-0">
+                  <Users className="size-4 sm:size-5 text-purple-600" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xl sm:text-2xl font-semibold">{subAdmins.length}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Sub-Admins</p>
                 </div>
               </div>
             </CardContent>
@@ -589,41 +596,51 @@ export function MainAdminDashboard({ accessToken, onLogout }: MainAdminDashboard
         </div>
 
         {/* Action Buttons */}
-        <div className="flex gap-3 mb-6">
-          <Button onClick={() => setShowNewDept(true)}>
-            <Plus className="size-4 mr-2" />
-            Add Department
+        <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 mb-4 sm:mb-6">
+          <Button onClick={() => setShowNewDept(true)} className="min-h-[44px] text-sm sm:text-base">
+            <Plus className="size-3 sm:size-4 mr-1 sm:mr-2" />
+            <span className="hidden sm:inline">Add Department</span>
+            <span className="sm:hidden">Add Dept</span>
           </Button>
-          <Button onClick={() => setShowNewSubAdmin(true)} variant="outline">
-            <UserPlus className="size-4 mr-2" />
-            Add Sub-Admin
+          <Button onClick={() => setShowNewSubAdmin(true)} variant="outline" className="min-h-[44px] text-sm sm:text-base">
+            <UserPlus className="size-3 sm:size-4 mr-1 sm:mr-2" />
+            <span className="hidden sm:inline">Add Sub-Admin</span>
+            <span className="sm:hidden">Add Sub-Admin</span>
           </Button>
           <Button onClick={() => {
             setShowAnnouncements(true);
             loadAnnouncements();
-          }} variant="outline">
-            <Megaphone className="size-4 mr-2" />
-            Manage Announcements
+          }} variant="outline" className="min-h-[44px] text-sm sm:text-base">
+            <Megaphone className="size-3 sm:size-4 mr-1 sm:mr-2" />
+            <span className="hidden sm:inline">Manage Announcements</span>
+            <span className="sm:hidden">Announcements</span>
           </Button>
         </div>
 
         {/* Complaints Tabs */}
-        <Tabs defaultValue="all" className="space-y-4">
-          <TabsList>
-            <TabsTrigger value="all">
-              All Complaints
+        <Tabs defaultValue="all" className="space-y-3 sm:space-y-4">
+          <TabsList className="w-full grid grid-cols-2 sm:grid-cols-4 h-auto overflow-x-auto">
+            <TabsTrigger value="all" className="text-xs sm:text-sm py-2 sm:py-2.5 px-2 sm:px-4">
+              <span className="hidden sm:inline">All Complaints</span>
+              <span className="sm:hidden">All</span>
               {complaints.length > 0 && (
-                <Badge className="ml-2 bg-blue-600">{complaints.length}</Badge>
+                <Badge className="ml-1 sm:ml-2 bg-blue-600 text-[10px] sm:text-xs">{complaints.length}</Badge>
               )}
             </TabsTrigger>
-            <TabsTrigger value="pending">
-              Pending Assignment
+            <TabsTrigger value="pending" className="text-xs sm:text-sm py-2 sm:py-2.5 px-2 sm:px-4">
+              <span className="hidden sm:inline">Pending Assignment</span>
+              <span className="sm:hidden">Pending</span>
               {pendingComplaints.length > 0 && (
-                <Badge className="ml-2 bg-yellow-600">{pendingComplaints.length}</Badge>
+                <Badge className="ml-1 sm:ml-2 bg-yellow-600 text-[10px] sm:text-xs">{pendingComplaints.length}</Badge>
               )}
             </TabsTrigger>
-            <TabsTrigger value="progress">In Progress</TabsTrigger>
-            <TabsTrigger value="completed">Completed</TabsTrigger>
+            <TabsTrigger value="progress" className="text-xs sm:text-sm py-2 sm:py-2.5 px-2 sm:px-4">
+              <span className="hidden sm:inline">In Progress</span>
+              <span className="sm:hidden">Progress</span>
+            </TabsTrigger>
+            <TabsTrigger value="completed" className="text-xs sm:text-sm py-2 sm:py-2.5 px-2 sm:px-4">
+              Completed
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="pending" className="space-y-4">
@@ -635,7 +652,7 @@ export function MainAdminDashboard({ accessToken, onLogout }: MainAdminDashboard
                 </CardContent>
               </Card>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                 {pendingComplaints.map(complaint => (
                   <ComplaintCard
                     key={complaint.id}
@@ -650,8 +667,8 @@ export function MainAdminDashboard({ accessToken, onLogout }: MainAdminDashboard
             )}
           </TabsContent>
 
-          <TabsContent value="progress" className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <TabsContent value="progress" className="space-y-3 sm:space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
               {assignedComplaints.map(complaint => (
                 <ComplaintCard
                   key={complaint.id}
@@ -663,8 +680,8 @@ export function MainAdminDashboard({ accessToken, onLogout }: MainAdminDashboard
             </div>
           </TabsContent>
 
-          <TabsContent value="completed" className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <TabsContent value="completed" className="space-y-3 sm:space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
               {completedComplaints.map(complaint => (
                 <ComplaintCard
                   key={complaint.id}
@@ -676,28 +693,28 @@ export function MainAdminDashboard({ accessToken, onLogout }: MainAdminDashboard
             </div>
           </TabsContent>
 
-          <TabsContent value="all" className="space-y-4">
+          <TabsContent value="all" className="space-y-3 sm:space-y-4">
             {complaints.length === 0 ? (
               <Card>
-                <CardContent className="p-8 text-center">
-                  <FileText className="size-12 text-gray-400 mx-auto mb-4" />
-                  <p className="text-muted-foreground">No complaints registered yet</p>
-                  <p className="text-sm text-gray-400 mt-2">
+                <CardContent className="p-6 sm:p-8 text-center">
+                  <FileText className="size-10 sm:size-12 text-gray-400 mx-auto mb-3 sm:mb-4" />
+                  <p className="text-muted-foreground text-sm sm:text-base">No complaints registered yet</p>
+                  <p className="text-xs sm:text-sm text-gray-400 mt-2">
                     Citizens need to register complaints to see them here.
                   </p>
                 </CardContent>
               </Card>
             ) : (
               <>
-                <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                  <p className="text-sm text-blue-800">
-                    <strong>Total Complaints:</strong> {complaints.length} | 
-                    <strong className="ml-4">Pending:</strong> {pendingComplaints.length} | 
-                    <strong className="ml-4">In Progress:</strong> {assignedComplaints.length} | 
-                    <strong className="ml-4">Completed:</strong> {completedComplaints.length}
+                <div className="mb-3 sm:mb-4 p-3 sm:p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                  <p className="text-xs sm:text-sm text-blue-800 break-words">
+                    <strong>Total:</strong> {complaints.length} | 
+                    <strong className="ml-2 sm:ml-4">Pending:</strong> {pendingComplaints.length} | 
+                    <strong className="ml-2 sm:ml-4">In Progress:</strong> {assignedComplaints.length} | 
+                    <strong className="ml-2 sm:ml-4">Completed:</strong> {completedComplaints.length}
                   </p>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                   {complaints.map(complaint => (
                     <ComplaintCard
                       key={complaint.id}
@@ -718,19 +735,19 @@ export function MainAdminDashboard({ accessToken, onLogout }: MainAdminDashboard
         setSelectedComplaint(null);
         setFeedback(null);
       }}>
-        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto mx-2 sm:mx-4">
           {selectedComplaint && (
             <>
               <DialogHeader>
-                <DialogTitle className="flex items-center gap-3">
+                <DialogTitle className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 text-lg sm:text-xl">
                   <span>Complaint Details</span>
-                  <Badge variant="outline" className="font-mono">
+                  <Badge variant="outline" className="font-mono text-xs sm:text-sm w-fit">
                     {selectedComplaint.token}
                   </Badge>
                 </DialogTitle>
               </DialogHeader>
               
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 {/* Citizen Information */}
                 <Card className="bg-blue-50 border-blue-200">
                   <CardContent className="p-4">
@@ -738,22 +755,22 @@ export function MainAdminDashboard({ accessToken, onLogout }: MainAdminDashboard
                       <Users className="size-4" />
                       Citizen Information
                     </h4>
-                    <div className="grid grid-cols-2 gap-3 text-sm">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 text-xs sm:text-sm">
                       <div>
                         <span className="text-muted-foreground">Name:</span>
-                        <p className="font-medium">{selectedComplaint.citizenName}</p>
+                        <p className="font-medium break-words">{selectedComplaint.citizenName}</p>
                       </div>
                       <div>
                         <span className="text-muted-foreground">Email:</span>
-                        <p className="font-medium">{selectedComplaint.citizenEmail || 'N/A'}</p>
+                        <p className="font-medium break-words">{selectedComplaint.citizenEmail || 'N/A'}</p>
                       </div>
                       <div>
                         <span className="text-muted-foreground">Phone:</span>
-                        <p className="font-medium">{selectedComplaint.citizenPhone || 'N/A'}</p>
+                        <p className="font-medium break-words">{selectedComplaint.citizenPhone || 'N/A'}</p>
                       </div>
                       <div>
                         <span className="text-muted-foreground">Registered On:</span>
-                        <p className="font-medium">
+                        <p className="font-medium break-words">
                           {new Date(selectedComplaint.createdAt).toLocaleString()}
                         </p>
                       </div>
@@ -773,14 +790,14 @@ export function MainAdminDashboard({ accessToken, onLogout }: MainAdminDashboard
                     {selectedComplaint.description}
                   </p>
 
-                  <div className="grid grid-cols-2 gap-4 text-sm">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 text-xs sm:text-sm">
                     <div>
                       <span className="text-muted-foreground">Location:</span>
-                      <p className="font-medium">{selectedComplaint.location}</p>
+                      <p className="font-medium break-words">{selectedComplaint.location}</p>
                     </div>
                     <div>
                       <span className="text-muted-foreground">Status:</span>
-                      <Badge variant="outline" className="capitalize">
+                      <Badge variant="outline" className="capitalize text-xs sm:text-sm">
                         {selectedComplaint.status.replace(/_/g, ' ')}
                       </Badge>
                     </div>
@@ -792,14 +809,14 @@ export function MainAdminDashboard({ accessToken, onLogout }: MainAdminDashboard
                           selectedComplaint.priority === 'high' ? 'default' : 
                           'outline'
                         }
-                        className="capitalize"
+                        className="capitalize text-xs sm:text-sm"
                       >
                         {selectedComplaint.priority}
                       </Badge>
                     </div>
                     <div>
                       <span className="text-muted-foreground">Complaint ID:</span>
-                      <p className="font-medium font-mono text-xs">{selectedComplaint.id}</p>
+                      <p className="font-medium font-mono text-[10px] sm:text-xs break-all">{selectedComplaint.id}</p>
                     </div>
                   </div>
 
@@ -819,8 +836,8 @@ export function MainAdminDashboard({ accessToken, onLogout }: MainAdminDashboard
                   {/* Photos */}
                   {selectedComplaint.photos && selectedComplaint.photos.length > 0 && (
                     <div className="mt-4">
-                      <h5 className="font-medium mb-2">Photos ({selectedComplaint.photos.length})</h5>
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                      <h5 className="font-medium mb-2 text-sm sm:text-base">Photos ({selectedComplaint.photos.length})</h5>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
                         {selectedComplaint.photos.map((photo: string, index: number) => (
                           <div key={index} className="aspect-square rounded-lg overflow-hidden border border-gray-200">
                             <img
@@ -845,23 +862,23 @@ export function MainAdminDashboard({ accessToken, onLogout }: MainAdminDashboard
                   <Card className="bg-green-50 border-green-200">
                     <CardContent className="p-4">
                       <h4 className="font-medium mb-3">Assignment Information</h4>
-                      <div className="grid grid-cols-2 gap-3 text-sm">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 text-xs sm:text-sm">
                         {assignment.subAdminName && (
                           <div>
                             <span className="text-muted-foreground">Sub-Admin:</span>
-                            <p className="font-medium">{assignment.subAdminName}</p>
+                            <p className="font-medium break-words">{assignment.subAdminName}</p>
                           </div>
                         )}
                         {assignment.contractorName && (
                           <div>
                             <span className="text-muted-foreground">Contractor:</span>
-                            <p className="font-medium">{assignment.contractorName}</p>
+                            <p className="font-medium break-words">{assignment.contractorName}</p>
                           </div>
                         )}
                         {assignment.assignedAt && (
                           <div>
                             <span className="text-muted-foreground">Assigned On:</span>
-                            <p className="font-medium">
+                            <p className="font-medium break-words">
                               {new Date(assignment.assignedAt).toLocaleString()}
                             </p>
                           </div>
@@ -896,7 +913,7 @@ export function MainAdminDashboard({ accessToken, onLogout }: MainAdminDashboard
                           <h5 className="font-medium mb-2 text-sm">
                             Completion Photos ({assignment.completionPhotos.length})
                           </h5>
-                          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
                             {assignment.completionPhotos.map((photo: string, index: number) => (
                               <div key={index} className="aspect-square rounded-lg overflow-hidden border border-gray-200">
                                 <img
@@ -976,9 +993,9 @@ export function MainAdminDashboard({ accessToken, onLogout }: MainAdminDashboard
                 )}
 
                 {/* Priority Setting */}
-                <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg">
-                  <Label>Set Priority:</Label>
-                  <div className="flex gap-2">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 p-3 sm:p-4 bg-gray-50 rounded-lg">
+                  <Label className="text-sm sm:text-base">Set Priority:</Label>
+                  <div className="flex flex-wrap gap-2">
                     {['urgent', 'high', 'normal', 'low'].map(p => (
                       <Button
                         key={p}
@@ -986,7 +1003,7 @@ export function MainAdminDashboard({ accessToken, onLogout }: MainAdminDashboard
                         variant={selectedComplaint.priority === p ? 'default' : 'outline'}
                         onClick={() => handleSetPriority(p)}
                         disabled={loading}
-                        className="capitalize"
+                        className="capitalize min-h-[44px] text-xs sm:text-sm"
                       >
                         {p}
                       </Button>
@@ -1007,9 +1024,9 @@ export function MainAdminDashboard({ accessToken, onLogout }: MainAdminDashboard
                 {selectedComplaint.status === 'pending' && (
                   <Button 
                     onClick={() => setShowAssign(true)}
-                    className="w-full"
+                    className="w-full min-h-[44px] text-sm sm:text-base"
                   >
-                    <UserPlus className="size-4 mr-2" />
+                    <UserPlus className="size-3 sm:size-4 mr-1 sm:mr-2" />
                     Assign to Sub-Admin
                   </Button>
                 )}
@@ -1021,18 +1038,18 @@ export function MainAdminDashboard({ accessToken, onLogout }: MainAdminDashboard
 
       {/* Assign Sub-Admin Dialog */}
       <Dialog open={showAssign} onOpenChange={setShowAssign}>
-        <DialogContent>
+        <DialogContent className="mx-2 sm:mx-4">
           <DialogHeader>
-            <DialogTitle>Assign to Sub-Admin</DialogTitle>
-            <DialogDescription>
+            <DialogTitle className="text-lg sm:text-xl">Assign to Sub-Admin</DialogTitle>
+            <DialogDescription className="text-xs sm:text-sm">
               Select a department sub-admin to handle this complaint
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleAssignSubAdmin} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="subAdminId">Sub-Admin / Department</Label>
+          <form onSubmit={handleAssignSubAdmin} className="space-y-3 sm:space-y-4">
+            <div className="space-y-1.5 sm:space-y-2">
+              <Label htmlFor="subAdminId" className="text-sm sm:text-base">Sub-Admin / Department</Label>
               <Select name="subAdminId" required>
-                <SelectTrigger>
+                <SelectTrigger className="min-h-[44px] text-sm sm:text-base">
                   <SelectValue placeholder="Choose sub-admin" />
                 </SelectTrigger>
                 <SelectContent>
@@ -1045,14 +1062,15 @@ export function MainAdminDashboard({ accessToken, onLogout }: MainAdminDashboard
               </Select>
             </div>
 
-            <div className="flex gap-3">
-              <Button type="submit" className="flex-1" disabled={loading}>
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+              <Button type="submit" className="flex-1 min-h-[44px] text-sm sm:text-base" disabled={loading}>
                 {loading ? 'Assigning...' : 'Assign'}
               </Button>
               <Button 
                 type="button" 
                 variant="outline" 
                 onClick={() => setShowAssign(false)}
+                className="min-h-[44px] text-sm sm:text-base"
               >
                 Cancel
               </Button>
@@ -1063,54 +1081,58 @@ export function MainAdminDashboard({ accessToken, onLogout }: MainAdminDashboard
 
       {/* Add Department Dialog */}
       <Dialog open={showNewDept} onOpenChange={setShowNewDept}>
-        <DialogContent>
+        <DialogContent className="mx-2 sm:mx-4">
           <DialogHeader>
-            <DialogTitle>Add New Department</DialogTitle>
-            <DialogDescription>
+            <DialogTitle className="text-lg sm:text-xl">Add New Department</DialogTitle>
+            <DialogDescription className="text-xs sm:text-sm">
               Create a new department for complaint management
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleAddDepartment} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Department Name</Label>
+          <form onSubmit={handleAddDepartment} className="space-y-3 sm:space-y-4">
+            <div className="space-y-1.5 sm:space-y-2">
+              <Label htmlFor="name" className="text-sm sm:text-base">Department Name</Label>
               <Input
                 id="name"
                 name="name"
                 placeholder="e.g., Waste Management Department"
                 required
+                className="min-h-[44px] text-sm sm:text-base"
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="phone">Customer Care Phone</Label>
+            <div className="space-y-1.5 sm:space-y-2">
+              <Label htmlFor="phone" className="text-sm sm:text-base">Customer Care Phone</Label>
               <Input
                 id="phone"
                 name="phone"
                 type="tel"
                 placeholder="1800-XXX-XXXX"
                 required
+                className="min-h-[44px] text-sm sm:text-base"
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="email">Customer Care Email</Label>
+            <div className="space-y-1.5 sm:space-y-2">
+              <Label htmlFor="email" className="text-sm sm:text-base">Customer Care Email</Label>
               <Input
                 id="email"
                 name="email"
                 type="email"
                 placeholder="department@civicease.gov"
                 required
+                className="min-h-[44px] text-sm sm:text-base"
               />
             </div>
 
-            <div className="flex gap-3">
-              <Button type="submit" className="flex-1" disabled={loading}>
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+              <Button type="submit" className="flex-1 min-h-[44px] text-sm sm:text-base" disabled={loading}>
                 {loading ? 'Adding...' : 'Add Department'}
               </Button>
               <Button 
                 type="button" 
                 variant="outline" 
                 onClick={() => setShowNewDept(false)}
+                className="min-h-[44px] text-sm sm:text-base"
               >
                 Cancel
               </Button>
@@ -1121,49 +1143,52 @@ export function MainAdminDashboard({ accessToken, onLogout }: MainAdminDashboard
 
       {/* Add Sub-Admin Dialog */}
       <Dialog open={showNewSubAdmin} onOpenChange={setShowNewSubAdmin}>
-        <DialogContent>
+        <DialogContent className="mx-2 sm:mx-4">
           <DialogHeader>
-            <DialogTitle>Add New Sub-Admin</DialogTitle>
-            <DialogDescription>
+            <DialogTitle className="text-lg sm:text-xl">Add New Sub-Admin</DialogTitle>
+            <DialogDescription className="text-xs sm:text-sm">
               Create a department head account
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleAddSubAdmin} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="sa-name">Full Name</Label>
+          <form onSubmit={handleAddSubAdmin} className="space-y-3 sm:space-y-4">
+            <div className="space-y-1.5 sm:space-y-2">
+              <Label htmlFor="sa-name" className="text-sm sm:text-base">Full Name</Label>
               <Input
                 id="sa-name"
                 name="name"
                 placeholder="John Doe"
                 required
+                className="min-h-[44px] text-sm sm:text-base"
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="sa-email">Email</Label>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+              <div className="space-y-1.5 sm:space-y-2">
+                <Label htmlFor="sa-email" className="text-sm sm:text-base">Email</Label>
                 <Input
                   id="sa-email"
                   name="email"
                   type="email"
                   placeholder="subadmin@example.com"
                   required
+                  className="min-h-[44px] text-sm sm:text-base"
                 />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="sa-phone">Phone</Label>
+              <div className="space-y-1.5 sm:space-y-2">
+                <Label htmlFor="sa-phone" className="text-sm sm:text-base">Phone</Label>
                 <Input
                   id="sa-phone"
                   name="phone"
                   type="tel"
                   placeholder="+91 9876543210"
                   required
+                  className="min-h-[44px] text-sm sm:text-base"
                 />
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="sa-password">Password</Label>
+            <div className="space-y-1.5 sm:space-y-2">
+              <Label htmlFor="sa-password" className="text-sm sm:text-base">Password</Label>
               <Input
                 id="sa-password"
                 name="password"
@@ -1171,13 +1196,14 @@ export function MainAdminDashboard({ accessToken, onLogout }: MainAdminDashboard
                 placeholder="••••••••"
                 required
                 minLength={6}
+                className="min-h-[44px] text-sm sm:text-base"
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="departmentId">Department</Label>
+            <div className="space-y-1.5 sm:space-y-2">
+              <Label htmlFor="departmentId" className="text-sm sm:text-base">Department</Label>
               <Select name="departmentId" required>
-                <SelectTrigger>
+                <SelectTrigger className="min-h-[44px] text-sm sm:text-base">
                   <SelectValue placeholder="Select department" />
                 </SelectTrigger>
                 <SelectContent>
@@ -1190,14 +1216,15 @@ export function MainAdminDashboard({ accessToken, onLogout }: MainAdminDashboard
               </Select>
             </div>
 
-            <div className="flex gap-3">
-              <Button type="submit" className="flex-1" disabled={loading}>
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+              <Button type="submit" className="flex-1 min-h-[44px] text-sm sm:text-base" disabled={loading}>
                 {loading ? 'Creating...' : 'Create Sub-Admin'}
               </Button>
               <Button 
                 type="button" 
                 variant="outline" 
                 onClick={() => setShowNewSubAdmin(false)}
+                className="min-h-[44px] text-sm sm:text-base"
               >
                 Cancel
               </Button>
@@ -1208,37 +1235,37 @@ export function MainAdminDashboard({ accessToken, onLogout }: MainAdminDashboard
 
       {/* Departments Info Dialog */}
       <Dialog open={showDeptInfo} onOpenChange={setShowDeptInfo}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto mx-2 sm:mx-4">
           <DialogHeader>
-            <DialogTitle>Departments & Customer Care</DialogTitle>
-            <DialogDescription>
+            <DialogTitle className="text-lg sm:text-xl">Departments & Customer Care</DialogTitle>
+            <DialogDescription className="text-xs sm:text-sm">
               View all departments and their contact information
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-3">
+          <div className="space-y-2 sm:space-y-3">
             {departments.map(dept => (
               <Card key={dept.id}>
-                <CardContent className="p-4">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1">
-                      <h4 className="font-medium mb-1">{dept.name}</h4>
-                      <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
+                <CardContent className="p-3 sm:p-4">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-4">
+                    <div className="flex-1 min-w-0">
+                      <h4 className="font-medium mb-1 text-sm sm:text-base break-words">{dept.name}</h4>
+                      <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
                         <div className="flex items-center gap-1">
-                          <Phone className="size-3" />
-                          <span>{dept.customerCare?.phone || 'N/A'}</span>
+                          <Phone className="size-3 flex-shrink-0" />
+                          <span className="break-words">{dept.customerCare?.phone || 'N/A'}</span>
                         </div>
                         <div className="flex items-center gap-1">
-                          <Mail className="size-3" />
-                          <span>{dept.customerCare?.email || 'N/A'}</span>
+                          <Mail className="size-3 flex-shrink-0" />
+                          <span className="break-words">{dept.customerCare?.email || 'N/A'}</span>
                         </div>
                       </div>
                     </div>
                     {dept.subAdminName ? (
-                      <Badge variant="secondary">
+                      <Badge variant="secondary" className="text-xs sm:text-sm w-fit">
                         Head: {dept.subAdminName}
                       </Badge>
                     ) : (
-                      <Badge variant="outline">No Sub-Admin</Badge>
+                      <Badge variant="outline" className="text-xs sm:text-sm w-fit">No Sub-Admin</Badge>
                     )}
                   </div>
                 </CardContent>
@@ -1250,14 +1277,14 @@ export function MainAdminDashboard({ accessToken, onLogout }: MainAdminDashboard
 
       {/* Announcements Management Dialog */}
       <Dialog open={showAnnouncements} onOpenChange={setShowAnnouncements}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto mx-2 sm:mx-4">
           <DialogHeader>
-            <DialogTitle>Manage Announcements</DialogTitle>
-            <DialogDescription>
+            <DialogTitle className="text-lg sm:text-xl">Manage Announcements</DialogTitle>
+            <DialogDescription className="text-xs sm:text-sm">
               Create and manage announcements that appear on the login/signup page
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <Button
               onClick={() => {
                 setEditingAnnouncement(null);
@@ -1282,28 +1309,28 @@ export function MainAdminDashboard({ accessToken, onLogout }: MainAdminDashboard
                   <Card key={announcement.id} className={announcement.isActive ? 'border-2 border-blue-300' : 'opacity-60'}>
                     <CardContent className="p-4">
                       <div className="flex items-start justify-between gap-4">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
-                            <h4 className="font-semibold">{announcement.title}</h4>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex flex-wrap items-center gap-2 mb-2">
+                            <h4 className="font-semibold text-sm sm:text-base break-words">{announcement.title}</h4>
                             {announcement.priority === 'high' && (
-                              <Badge variant="destructive">High Priority</Badge>
+                              <Badge variant="destructive" className="text-[10px] sm:text-xs">High Priority</Badge>
                             )}
                             {!announcement.isActive && (
-                              <Badge variant="outline">Inactive</Badge>
+                              <Badge variant="outline" className="text-[10px] sm:text-xs">Inactive</Badge>
                             )}
                           </div>
-                          <p className="text-sm text-muted-foreground whitespace-pre-line mb-2">
+                          <p className="text-xs sm:text-sm text-muted-foreground whitespace-pre-line mb-2 break-words">
                             {announcement.message}
                           </p>
-                          <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                            <span>By: {announcement.createdByName}</span>
-                            <span>Created: {new Date(announcement.createdAt).toLocaleString()}</span>
+                          <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-[10px] sm:text-xs text-muted-foreground">
+                            <span className="break-words">By: {announcement.createdByName}</span>
+                            <span className="break-words">Created: {new Date(announcement.createdAt).toLocaleString()}</span>
                             {announcement.updatedAt !== announcement.createdAt && (
-                              <span>Updated: {new Date(announcement.updatedAt).toLocaleString()}</span>
+                              <span className="break-words">Updated: {new Date(announcement.updatedAt).toLocaleString()}</span>
                             )}
                           </div>
                         </div>
-                        <div className="flex gap-2">
+                        <div className="flex gap-1 sm:gap-2 flex-shrink-0">
                           <Button
                             variant="outline"
                             size="sm"
@@ -1311,16 +1338,18 @@ export function MainAdminDashboard({ accessToken, onLogout }: MainAdminDashboard
                               setEditingAnnouncement(announcement);
                               setShowAnnouncementForm(true);
                             }}
+                            className="min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0"
                           >
-                            <Edit className="size-4" />
+                            <Edit className="size-3 sm:size-4" />
                           </Button>
                           <Button
                             variant="outline"
                             size="sm"
                             onClick={() => handleDeleteAnnouncement(announcement.id)}
                             disabled={loading}
+                            className="min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0"
                           >
-                            <Trash2 className="size-4" />
+                            <Trash2 className="size-3 sm:size-4" />
                           </Button>
                         </div>
                       </div>
@@ -1340,29 +1369,30 @@ export function MainAdminDashboard({ accessToken, onLogout }: MainAdminDashboard
           setEditingAnnouncement(null);
         }
       }}>
-        <DialogContent>
+        <DialogContent className="mx-2 sm:mx-4">
           <DialogHeader>
-            <DialogTitle>
+            <DialogTitle className="text-lg sm:text-xl">
               {editingAnnouncement ? 'Edit Announcement' : 'Create New Announcement'}
             </DialogTitle>
-            <DialogDescription>
+            <DialogDescription className="text-xs sm:text-sm">
               This announcement will be displayed on the login/signup page
             </DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleSaveAnnouncement} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="announcement-title">Title</Label>
+          <form onSubmit={handleSaveAnnouncement} className="space-y-3 sm:space-y-4">
+            <div className="space-y-1.5 sm:space-y-2">
+              <Label htmlFor="announcement-title" className="text-sm sm:text-base">Title</Label>
               <Input
                 id="announcement-title"
                 name="title"
                 placeholder="e.g., Important Notice"
                 defaultValue={editingAnnouncement?.title}
                 required
+                className="min-h-[44px] text-sm sm:text-base"
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="announcement-message">Message</Label>
+            <div className="space-y-1.5 sm:space-y-2">
+              <Label htmlFor="announcement-message" className="text-sm sm:text-base">Message</Label>
               <Textarea
                 id="announcement-message"
                 name="message"
@@ -1370,13 +1400,14 @@ export function MainAdminDashboard({ accessToken, onLogout }: MainAdminDashboard
                 rows={5}
                 defaultValue={editingAnnouncement?.message}
                 required
+                className="text-sm sm:text-base min-h-[120px]"
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="announcement-priority">Priority</Label>
+            <div className="space-y-1.5 sm:space-y-2">
+              <Label htmlFor="announcement-priority" className="text-sm sm:text-base">Priority</Label>
               <Select name="priority" defaultValue={editingAnnouncement?.priority || 'normal'}>
-                <SelectTrigger>
+                <SelectTrigger className="min-h-[44px] text-sm sm:text-base">
                   <SelectValue placeholder="Select priority" />
                 </SelectTrigger>
                 <SelectContent>
@@ -1386,10 +1417,10 @@ export function MainAdminDashboard({ accessToken, onLogout }: MainAdminDashboard
               </Select>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="announcement-active">Status</Label>
+            <div className="space-y-1.5 sm:space-y-2">
+              <Label htmlFor="announcement-active" className="text-sm sm:text-base">Status</Label>
               <Select name="isActive" defaultValue={editingAnnouncement?.isActive !== false ? 'true' : 'false'}>
-                <SelectTrigger>
+                <SelectTrigger className="min-h-[44px] text-sm sm:text-base">
                   <SelectValue placeholder="Select status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -1399,8 +1430,8 @@ export function MainAdminDashboard({ accessToken, onLogout }: MainAdminDashboard
               </Select>
             </div>
 
-            <div className="flex gap-3">
-              <Button type="submit" className="flex-1" disabled={loading}>
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+              <Button type="submit" className="flex-1 min-h-[44px] text-sm sm:text-base" disabled={loading}>
                 {loading ? 'Saving...' : editingAnnouncement ? 'Update' : 'Create'}
               </Button>
               <Button
@@ -1410,6 +1441,7 @@ export function MainAdminDashboard({ accessToken, onLogout }: MainAdminDashboard
                   setShowAnnouncementForm(false);
                   setEditingAnnouncement(null);
                 }}
+                className="min-h-[44px] text-sm sm:text-base"
               >
                 Cancel
               </Button>
