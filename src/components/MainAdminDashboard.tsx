@@ -619,17 +619,17 @@ export function MainAdminDashboard({ accessToken, onLogout }: MainAdminDashboard
 
         {/* Complaints Tabs */}
         <Tabs defaultValue="all" className="space-y-3 sm:space-y-4">
-          <TabsList className="w-full grid grid-cols-2 sm:grid-cols-4 h-auto overflow-x-auto">
+          <TabsList className="w-full grid  sm:grid-cols-4 grid-cols-2  h-auto overflow-x-auto">
             <TabsTrigger value="all" className="text-xs sm:text-sm py-2 sm:py-2.5 px-2 sm:px-4">
               <span className="hidden sm:inline">All Complaints</span>
-              <span className="sm:hidden">All</span>
+              <span className="sm:hidden"></span>
               {complaints.length > 0 && (
                 <Badge className="ml-1 sm:ml-2 bg-blue-600 text-[10px] sm:text-xs">{complaints.length}</Badge>
               )}
             </TabsTrigger>
             <TabsTrigger value="pending" className="text-xs sm:text-sm py-2 sm:py-2.5 px-2 sm:px-4">
               <span className="hidden sm:inline">Pending Assignment</span>
-              <span className="sm:hidden">Pending</span>
+              <span className="sm:hidden"></span>
               {pendingComplaints.length > 0 && (
                 <Badge className="ml-1 sm:ml-2 bg-yellow-600 text-[10px] sm:text-xs">{pendingComplaints.length}</Badge>
               )}
