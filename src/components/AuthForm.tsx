@@ -221,7 +221,7 @@ export function AuthForm({ onAuthSuccess }: AuthFormProps) {
           </div>
           <CardTitle className="text-2xl sm:text-3xl">CivicEase Portal</CardTitle>
           <CardDescription className="text-sm sm:text-base">
-            Civic Complaint Management System
+            Civic Complaint Management 
           </CardDescription>
         </CardHeader>
         <CardContent className="px-4 sm:px-6 pb-4 sm:pb-6">
